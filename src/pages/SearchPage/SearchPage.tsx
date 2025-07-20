@@ -8,6 +8,7 @@ import { fetchMangaId } from "../../redux/slice/manga";
 import Search from "../../components/Search/Search";
 import Pagination from "../../components/Pagination/Pagination";
 import {themeContext} from "../../roviders/ThemeContext";
+import TagList from "@/components/TagList/TagList";
 
 const SearchPage = () => {
     const location = useLocation();
@@ -16,7 +17,7 @@ const SearchPage = () => {
     const [color] = useContext(themeContext);
 
     const searchValue = new URLSearchParams(location.search).get('q') || '';
-    const pageSearchValue = useAppSelector((state: any) => state.search.pageSearchValue);
+    const pageSearchValue = useAppSelector((state) => state.search.pageSearchValue);
     const searchResults = useAppSelector((state) => state.search.searchResults);
     const currentOffset = useAppSelector((state) => state.search.currentOffset);
     const totalResults = useAppSelector((state) => state.search.totalResults);
@@ -66,13 +67,17 @@ const SearchPage = () => {
                                 const coverUrl = fileName ? `https://uploads.mangadex.org/covers/${manga.id}/${fileName}.256.jpg` : null;
 
                                 return (
-                                    <div key={manga.id} onClick={() => handleClick(manga)}>
-                                        <div className="search-page__item">
-                                            <div className="search-page__img">
-                                                {coverUrl && <img src={coverUrl} alt="Cover" />}
-                                            </div>
+                                    <div className={`search-page__item grey-${color}`} key={manga.id} onClick={() => handleClick(manga)}>
+                                        <div className="search-page__img">
+                                            {coverUrl && <img src={coverUrl} alt="Cover" />}
+                                        </div>
+                                        <div  className="search-page__text">
                                             <div className={`search-page__title text-${color}`}>
                                                 <h3>{manga.attributes.title?.en}</h3>
+                                            </div>
+                                            <TagList className="search-page__tag" tags={manga.attributes.tags}/>
+                                            <div className={`search-field__item-description text-${color}`}>
+                                                <p>{manga?.attributes?.description.en}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -88,8 +93,8 @@ const SearchPage = () => {
                             )}
                         </>
                     ) : (
-                        <div className="search-page__no-results">
-                            <h3>Ничего не найдено</h3>
+                        <div className={`search-page__no-results text-${color}`}>
+                            <h3>Nothing found</h3>
                         </div>
                     )}
                 </div>

@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import "./SearchInput.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -9,10 +9,11 @@ import {
     setPageSearchValue,
     setSearchValue
 } from "../../redux/slice/search";
-import { Manga, Relationship } from "../../types/types";
+import { Manga } from "../../types/types";
 import { useNavigate } from "react-router-dom";
-import {fetchMangaId} from "../../redux/slice/manga";
-import {themeContext} from "../../roviders/ThemeContext";
+import { fetchMangaId } from "../../redux/slice/manga";
+import { themeContext } from "../../roviders/ThemeContext";
+import { fetchImage, getProxedImgaes } from "@/utils/useCoverUrls";
 
 const SearchInput = () => {
     const [isListVisible, setIsListVisible] = useState(false);
@@ -22,16 +23,27 @@ const SearchInput = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    let searchValue = useAppSelector((state: any) => state.search.searchValue);
-    let pageSearchValue = useAppSelector((state: any) => state.search.pageSearchValue);
+    const searchValue = useAppSelector((state: any) => state.search.searchValue);
     const searchResults = useAppSelector(state => state.search.searchResults);
 
+    const [imagesMap, setImagesMap] = useState<Record<string, string>>({});
+
+    useEffect(() => {
+        searchResults.forEach(manga => {
+            const [coverUrl] = getProxedImgaes(manga);
+            if (coverUrl && !imagesMap[manga.id]) {
+                fetchImage(String(coverUrl)).then(imgSrc => {
+                    setImagesMap(prev => ({ ...prev, [manga.id]: imgSrc }));
+                });
+            }
+        });
+    }, [searchResults, imagesMap]);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const searchValue = event.target.value;
-        dispatch(setSearchValue(searchValue));
-        if (searchValue.trim()) {
-            dispatch(fetchMangaByTitle({ title: searchValue, offset: 0 }));
+        const value = event.target.value;
+        dispatch(setSearchValue(value));
+        if (value.trim()) {
+            dispatch(fetchMangaByTitle({ title: value, offset: 0 }));
             setIsListVisible(true);
         } else {
             dispatch(clearSearch());
@@ -39,13 +51,11 @@ const SearchInput = () => {
         }
     };
 
-    const handleFocus = () => {
-        setIsFocused(true);
-    };
+    const handleFocus = () => setIsFocused(true);
 
     const handleBlur = () => {
         setIsFocused(false);
-        dispatch(setSearchValue(""));
+        setTimeout(() => setIsListVisible(false), 150);
     };
 
     const handleClick = (manga: Manga) => {
@@ -57,7 +67,7 @@ const SearchInput = () => {
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             navigate(`/search?q=${searchValue}`);
-            dispatch(setPageSearchValue(searchValue))
+            dispatch(setPageSearchValue(searchValue));
             dispatch(setSearchValue(''));
             setIsListVisible(false);
         }
@@ -79,39 +89,47 @@ const SearchInput = () => {
                 value={searchValue}
                 onChange={handleSearchChange}
                 onKeyDown={handleKeyDown}
+                autoComplete="off"
             />
             {isListVisible && searchResults?.length > 0 && isFocused && (
-                <ul className={`search-field background-${color}`}>
-                    {searchResults.map((manga) => {
-                        const coverArtIndex = manga.relationships.findIndex(
-                            (relationship: Relationship) => relationship.type === 'cover_art'
-                        );
-                        const cover = manga.relationships?.[coverArtIndex]?.attributes;
-                        const fileName = cover?.fileName;
-                        const coverUrl = fileName ? `https://uploads.mangadex.org/covers/${manga.id}/${fileName}` : null;
-
+                <ul className={`search-field scroll-container background-${color}`}>
+                    {searchResults.map(manga => {
+                        const coverImg = imagesMap[manga.id];
                         return (
-                            <li className="search-field__item" key={manga.id} onMouseDown={() => handleClick(manga)}>
-                                <div className={`search-field__item-wrapper grey-${color}`}>
-                                    <div className="search-field__item-img">{coverUrl && <img src={coverUrl} alt="Cover" />}</div>
-                                    <div className={`search-field__item-title text-${color}`}><h4>{manga.attributes.title?.en}</h4></div>
+                            <li
+                                className="search-field__item"
+                                key={manga.id}
+                                onMouseDown={() => handleClick(manga)}
+                            >
+                                <div className={`search-field__item-wrapper grey-${color} selection-${color}`}>
+                                    <div className="search-field__item-img">
+                                        {coverImg ? (
+                                            <img src={coverImg} alt="Cover" />
+                                        ) : (
+                                            <p>Обложка не доступна</p>
+                                        )}
+                                    </div>
+                                    <div className={`search-field__item-title text-${color}`}>
+                                        <h4>{manga.attributes.title?.en}</h4>
+                                    </div>
                                 </div>
                             </li>
                         );
                     })}
                 </ul>
             )}
-            {searchValue && (
+
+            {searchValue ? (
                 <button
                     type="button"
                     className={`search-button text-${color}`}
                     onClick={handleClearSearch}
+                    aria-label="Clear search"
                 >
                     <FontAwesomeIcon icon={faTimes} />
                 </button>
-            )}
-            {!searchValue && (
-                <button type="button" className={`search-button  text-${color}`}>
+            ) : (
+                <button type="button" className={`search-button text-${color}`} aria-label="Search">
                     <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </button>
             )}

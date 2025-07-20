@@ -12,13 +12,17 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    padding: 10px;
+    border-radius: 7px;
     margin-bottom: 20px;
 }
 
 .search-page__img {
     width: 100px;
     height: 150px;
+    flex-shrink: 0;
     overflow: hidden;
+    border-radius: 3px;
     margin-right: 15px;
 }
 
@@ -27,14 +31,25 @@
     height: 100%;
     object-fit: cover;
 }
-
+.search-page__text{
+    display: flex;
+    flex-direction: column;
+}
 .search-page__title {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    margin-bottom: 10px;
 }
-
+.search-page__tag{
+    margin-bottom: 10px;
+}
 .search-page__title h3{
     font-size: 24px;
     font-weight: 500;
+}
+.search-field__item-description p{
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }

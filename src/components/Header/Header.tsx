@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useRef} from 'react';
 import "./Header.css";
 import logoImg from "../../img/mangadex-logo.svg";
 import logoTextBlack from "../../img/mangadex-wordmark-black.svg";
@@ -17,6 +17,9 @@ const Header = () => {
     const navigate = useNavigate();
     const [color] = useContext(themeContext);
 
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const avatarRef = useRef<HTMLDivElement>(null);
+
     const user = useAppSelector((state) => state.users.user);
 
     useEffect(() => {
@@ -26,6 +29,22 @@ const Header = () => {
     useEffect(() => {
         setAvatar( user ? "https://mangadex.org/img/avatar.png" : avatarDefault)
     }, [user])
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(e.target as Node) &&
+                avatarRef.current &&
+                !avatarRef.current.contains(e.target as Node)
+            ) {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     const handleClickLogo = () => {
         navigate("/");
@@ -46,13 +65,18 @@ const Header = () => {
                     <div className="header-right">
                         <SearchInput/>
                         <div className={`header-right__avatar grey-${color}`}
-                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                             ref={avatarRef}>
                             <img className="avatar" src={avatar} alt="avatar"/>
                         </div>
                     </div>
                 </div>
             </div>
-            {isDropdownOpen && <DropDown/>}
+            {isDropdownOpen &&
+                (<div ref={dropdownRef}>
+                    <DropDown />
+                </div>)
+            }
         </div>
     );
 };

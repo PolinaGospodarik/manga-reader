@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axios from 'axios';
-import {AuthResponse, UsersState} from "../../types/types";
-import { removeTokensFromLocalStorage, saveTokensToLocalStorage} from "../../utils/authUtils";
+import {AuthResponse, UsersState} from "@/types/types";
+import {getTokensFromLocalStorage, removeTokensFromLocalStorage, saveTokensToLocalStorage} from "@/utils/authUtils";
 
-const API_URL = 'https://auth.mangadex.org/realms/mangadex/protocol/openid-connect/token';
+const API_URL = 'https://manga-proxy-chi.vercel.app/auth/realms/mangadex/protocol/openid-connect/token';
 const CLIENT_ID = 'personal-client-c40f284a-f83f-498e-b8b3-09665758f4a9-f429155c';
 const CLIENT_SECRET = '4aJRvTDjXFIWgJhGcdNoxLV4fXF6Wf1I';
 
@@ -24,7 +24,6 @@ export const login = createAsyncThunk<AuthResponse, { username: string; password
         try {
             const response = await axios.post<AuthResponse>(API_URL, creds, getAuthHeaders());
             const { access_token, refresh_token } = response.data;
-            // Сохраняем токены в localStorage
             saveTokensToLocalStorage(access_token, refresh_token);
             return response.data;
         } catch (error) {
@@ -49,7 +48,6 @@ export const refreshAccessToken = createAsyncThunk<AuthResponse, { refresh_token
         try {
             const response = await axios.post<AuthResponse>(API_URL, creds, getAuthHeaders());
             const { access_token, refresh_token } = response.data;
-            // Сохраняем обновлённые токены в localStorage
             saveTokensToLocalStorage(access_token, refresh_token);
             return response.data;
         } catch (error) {
@@ -65,8 +63,6 @@ export const refreshAccessToken = createAsyncThunk<AuthResponse, { refresh_token
 const usersSlice = createSlice({
     name: 'users',
     initialState: {
-        // access_token: getTokensFromLocalStorage().accessToken,
-        // refresh_token:getTokensFromLocalStorage().refreshToken,
         user: false,
         loading: false,
         error: null,
@@ -77,6 +73,10 @@ const usersSlice = createSlice({
             state.error = null;
             removeTokensFromLocalStorage();
             state.user= false;
+        },
+        initializeUser: (state) => {
+            const { accessToken } = getTokensFromLocalStorage();
+            state.user = !!accessToken;
         },
     },
     extraReducers: (builder) => {
@@ -91,10 +91,10 @@ const usersSlice = createSlice({
                 // state.access_token =payload.access_token;
                 // state.refresh_token =payload.refresh_token;
             })
-            .addCase(login.rejected, (state, action) => {
+            .addCase(login.rejected, (state, {payload}) => {
                 state.loading = false;
                 state.user = false;
-                state.error = action.payload || 'Ошибка при выполнении входа';
+                state.error = payload || 'Ошибка при выполнении входа';
             })
             .addCase(refreshAccessToken.pending, (state) => {
                 state.loading = true;
@@ -114,5 +114,5 @@ const usersSlice = createSlice({
 
 const { actions, reducer } = usersSlice;
 
-export const { logout } = actions;
+export const { logout, initializeUser } = actions;
 export default reducer;

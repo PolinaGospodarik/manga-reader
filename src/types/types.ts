@@ -1,3 +1,5 @@
+import AddToLibraryModal from "@/components/LibraryModal/LibraryModal";
+
 export type AuthResponse = {
     user: boolean
     access_token: string;
@@ -155,8 +157,39 @@ export type TContext =[
 ]
 
 //favorites
-export type Favorite ={
-    favorites: [],
+export type Library ={
+    libraries: LibraryItem[],
     loading: boolean,
-    error: null,
+    error: string | null,
 }
+export type AddToLibrariesParams ={
+    mangaId: string;
+    status?: 'reading' | 'on_hold' | 'plan_to_read' | 'dropped' | 're_reading'|'completed';
+    sessionToken: string;
+}
+export type LibraryItem ={
+    mangaId: string;
+    status?: 'reading' | 'on_hold' | 'plan_to_read' | 'dropped' | 're_reading'|'completed';
+}
+
+// LibraryModal
+export type LibraryModalType = {
+    imageSrc: string | null;
+    title: string;
+    onConfirm: (status: string) => void;
+    onCancel: () => void;
+};
+// AccentButton
+export type AccentButtonType = {
+    children: string;
+    onClick?: () => void;
+    type?: 'button' | 'submit' | 'reset';
+    className?: string;
+    disabled?: boolean;
+};
+
+
+export type CustomSelectType = {
+    defaultValue: string;
+    onChange: (value: string) => void;
+};

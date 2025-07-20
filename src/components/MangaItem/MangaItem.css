@@ -6,11 +6,13 @@
 
 .manga-id-background{
     width: 100%;
-    height: 60vh;
+    height: 41vh;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: absolute;
+    top: 0;
+    z-index: 1;
     left: 0;
 
 }
@@ -29,36 +31,41 @@
     align-items: start;
 }
 
-
 .manga-id__img{
+    border-radius: 5px;
+    overflow: hidden;
+    width: 215px;
+    height: 305px;
+    flex-shrink: 0;
+    z-index: 1;
     margin-right: 30px;
 }
 
-.manga-id__content{
+.manga-id__img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
+.manga-id__content{
+    z-index: 1;
  }
 
 .manga-id__content-top{
     margin-bottom: 10px;
-    height: 300px;
+    height: 240px;
 }
-
 .manga-id__title h1{
     font-size: 40px;
     color: #ffffff;
     line-height: 50px;
+    text-shadow: rgba(0, 0, 0, 0.3) 1px 2px 4px;
 }
-
-.manga-id__creators{
-
-}
-
 .manga-id__content-bottom{
     display: flex;
     align-items: center;
     margin-bottom: 30px;
 }
-
 
 .manga-id__creators-author, .manga-id__creators-artist{
     color: #ffffff;
@@ -66,13 +73,6 @@
 }
 
 .manga-id__button{
-    max-width: 400px;
-    padding: 20px 35px;
-    border-radius: 5px;
-    background-color: rgb(255,103,64);
-    color: white;
-    font-family: "League Spartan", sans-serif;
-    font-size: 20px;
     margin-right: 40px;
 }
 .manga-id__manga-stats{

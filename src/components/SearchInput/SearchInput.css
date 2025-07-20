@@ -2,8 +2,13 @@
     position: relative;
     width: 400px;
     border-radius: 5px;
-    padding: 5px 30px 5px 10px;
+    padding: 8px 35px 8px 15px;
     transition: all 0.3s ease;
+}
+.search-input::placeholder{
+    font-family:'Poppins', 'League Spartan', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
 }
 
 .search-input::-webkit-search-cancel-button {
@@ -18,11 +23,11 @@
 .search-button{
     position: absolute;
     background-color: transparent;
-    /*top: 50%;*/
-    /*transform: translateY(50%);*/
+    top: 50%;
+    transform: translateY(-50%);
     width: 20px;
     height: 20px;
-    right: 4px;
+    right: 10px;
 }
 
 .search-field {
@@ -49,9 +54,9 @@
     border-radius: 8px;
 }
 
-.search-field__item-wrapper:hover {
-    background-color: #f0f0f0;
-}
+/*.search-field__item-wrapper:hover {*/
+/*    background-color: #f0f0f0;*/
+/*}*/
 
 .search-field__item-img{
     display: block;

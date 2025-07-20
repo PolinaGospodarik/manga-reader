@@ -9,6 +9,9 @@
 body {
     font-family: 'Poppins', 'League Spartan', sans-serif;
 }
+button{
+    background-color: transparent;
+}
 
 .container{
     position: relative;
@@ -27,7 +30,18 @@ body {
     background: #0e0f12;
     box-shadow: 0 4px 8px rgba(229, 229, 229, 0.1);
 }
-
+.dropdown-icon-light{
+    background: #fff;
+}
+.dropdown-icon-light svg {
+    color: #0e0f12;
+}
+.dropdown-icon-dark{
+    background: #0e0f12;
+}
+.dropdown-icon-dark svg {
+    color: #cccccc;
+}
 
 .background-light{
     background: #fff;
@@ -35,35 +49,59 @@ body {
 .background-light::after{
     background: linear-gradient(0deg, rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
 }
-
 .background-dark{
     background: #0e0f12;
 }
 .background-dark:after{
     background: linear-gradient(0deg, rgba(14,15,18,1) 0%, rgba(0,0,0,0.4207808123249299) 100%);
 }
-
 .grey-light{
     background-color: rgba(211, 211, 211, 0.76);
 }
-
 .grey-dark{
     background-color: rgb(56, 56, 58);
 }
-
-
-
 .text-light{
     color: #1e1e1e;
 }
 .text-dark{
     color: #e1e1e1;
 }
-
 .placeholder-light::placeholder{
     color: #1e1e1e;
 }
 .placeholder-dark::placeholder{
-    color: #cccccc;
+    color: #ffffff;
+}
+.selection-light:hover{
+    background-color: rgb(204, 204, 204);
+}
+.selection-dark:hover{
+    background-color: rgb(78, 78, 80);
 }
 
+/*скролл*/
+.scroll-container {
+    overflow-y: auto;
+}
+.scroll-container::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+.scroll-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+.scroll-container {
+    scrollbar-color: #888 transparent;
+    scrollbar-width: thin;
+}

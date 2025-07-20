@@ -11,7 +11,7 @@ export const fetchMangaByTitle = createAsyncThunk<
     async ({ title, offset },   { rejectWithValue }) => {
         try {
             const response: AxiosResponse<MangaSearch> = await axios.get(
-                "https://api.mangadex.org/manga",
+                "https://manga-proxy-chi.vercel.app/proxy/manga",
                 {
                     params: {
                         title: title,
@@ -24,7 +24,6 @@ export const fetchMangaByTitle = createAsyncThunk<
                 }
             );
             const totalResults = response.data.total;
-            console.log(totalResults);
             return { mangas: response.data.data, totalResults };
         } catch (error) {
             if (axios.isAxiosError(error)) {

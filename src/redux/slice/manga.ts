@@ -7,10 +7,7 @@ export const fetchMangaPopular = createAsyncThunk<Manga[], void, { rejectValue: 
     "manga/fetchMangaPopular",
     async (_, { rejectWithValue }) =>{
         try{
-            const response = await axios.get("https://api.mangadex.org/manga", {
-                headers: {
-                    "User-Agent": "YourAppName/1.0"
-                },
+            const response = await axios.get("https://manga-proxy-chi.vercel.app/proxy/manga", {
                 params: {
                     limit: 10,
                     order: {
@@ -21,7 +18,6 @@ export const fetchMangaPopular = createAsyncThunk<Manga[], void, { rejectValue: 
                     includes: ["cover_art", "author", "artist"],
                 },
             });
-            console.log(response.data);
             return response.data.data;
         }
         catch (error) {
@@ -38,7 +34,7 @@ export const fetchMangaLatest = createAsyncThunk<Manga[], void, { rejectValue: s
     async (_, { rejectWithValue }) =>{
         try{
             const response = await axios.get(
-                "https://api.mangadex.org/manga",
+                "https://manga-proxy-chi.vercel.app/proxy/manga",
                 {
                     params: {
                         limit: 10,
@@ -61,16 +57,16 @@ export const fetchMangaLatest = createAsyncThunk<Manga[], void, { rejectValue: s
 
 export const fetchMangaId = createAsyncThunk<MangaApiResponse, string, { rejectValue: string }>(
     "manga/fetchMangaId",
-    async (mangaId, { rejectWithValue }) => {
+    async (mangaId: any, { rejectWithValue }) => {
         try {
 
-            const mangaResponse = await axios.get<MangaApiResponse>(`https://api.mangadex.org/manga/${mangaId}`, {
+            const mangaResponse = await axios.get<MangaApiResponse>(`https://manga-proxy-chi.vercel.app/proxy/manga/${mangaId}`, {
                 params: {
                     includes: ["cover_art", "author", "artist"],
                 },
             });
 
-            const statsResponse: AxiosResponse<MangaStatisticsResponse> = await axios.get(`https://api.mangadex.org/statistics/manga/${mangaId}`);
+            const statsResponse: AxiosResponse<MangaStatisticsResponse> = await axios.get(`https://manga-proxy-chi.vercel.app/proxy/statistics/manga/${mangaId}`);
             const stats = statsResponse.data.statistics[mangaId];
 
             return {
@@ -141,7 +137,6 @@ const mangaSlice = createSlice({
             .addCase(fetchMangaId.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 state.mangaItem= payload;
-                console.log(payload);
             })
             .addCase(fetchMangaId.rejected, (state, { payload }) => {
                 state.loading = false;

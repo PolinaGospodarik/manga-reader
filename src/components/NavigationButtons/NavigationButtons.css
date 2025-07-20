@@ -15,9 +15,9 @@
 }
 
 .swiper-pagination-bullet{
-    background-color: #ff4700;
+    background-color: #808080e6;
 }
 
 .swiper-pagination-bullet-active {
-    background-color: orangered;
+    background-color: rgba(255, 103, 64);
 }

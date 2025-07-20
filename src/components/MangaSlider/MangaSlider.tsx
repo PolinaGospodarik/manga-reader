@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useContext, useEffect} from 'react';
 import './MangaSlider.css';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -10,6 +10,7 @@ import { Pagination } from 'swiper/modules';
 import { fetchMangaSelfPublished } from '../../redux/slice/list';
 import MangaSlide from '../MangaSlide/MangaSlide';
 import {MangaDetails} from '../../types/types';
+import {themeContext} from "@/roviders/ThemeContext";
 
 interface MangaSliderProps {
     listId: string;
@@ -18,8 +19,10 @@ interface MangaSliderProps {
 
 const MangaSlider: React.FC<MangaSliderProps> = ({ listId, slidesPerView= 5}) => {
     const dispatch = useAppDispatch();
+    const [color] = useContext(themeContext);
+
     const mangaData = useAppSelector(
-        (state) => state.list.mangaSelfPublished[listId]?.mangaData // Используем только mangaData
+        (state) => state.list.mangaSelfPublished[listId]?.mangaData
     );
     const listName = useAppSelector(
         (state) => state.list.mangaSelfPublished[listId]?.listName
@@ -36,7 +39,7 @@ const MangaSlider: React.FC<MangaSliderProps> = ({ listId, slidesPerView= 5}) =>
     return (
         <div className="slider">
             <div className="container">
-                <div className="slider__text">
+                <div className={`slider__text text-${color}`}>
                     <h3>{listName || 'Загрузка...'}</h3>
                 </div>
 

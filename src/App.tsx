@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import {Provider} from "react-redux";
 import store from "./redux/store/store"
@@ -11,10 +11,19 @@ import MangaItem from "./components/MangaItem/MangaItem";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import ThemeContext from "./roviders/ThemeContext";
 import TestPage from "./pages/SearchPage/TestPage";
+import LibrariesPage from "@/pages/FavoritesPage/LibrariesPage";
+import {useAppDispatch} from "@/hooks";
+import {initializeUser} from "@/redux/slice/users";
+import ChapterPage from "@/pages/ChapterPage/ChapterPage";
 
 const AppContent = () => {
     const location = useLocation();
+    const dispatch = useAppDispatch();
     const isLoginPage = location.pathname === "/login";
+
+    useEffect(() => {
+        dispatch(initializeUser());
+    }, [dispatch]);
 
     return (
         <>
@@ -24,7 +33,8 @@ const AppContent = () => {
                 <Route path="/login" element={<LoginPage/>} />
                 <Route path="/manga/:id" element={<MangaItem/>} />
                 <Route path="/search" element={<SearchPage/>} />
-                <Route path="/test" element={<TestPage/>} />
+                <Route path="/favorites" element={<LibrariesPage/>} />
+                <Route path="/chapter/:chapterId" element={<ChapterPage/>} />
 
             </Routes>
         </>

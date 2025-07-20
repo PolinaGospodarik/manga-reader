@@ -11,7 +11,7 @@ export const fetchMangaSelfPublished = createAsyncThunk<
     async ({ listId, contentRating }, { rejectWithValue }) => {
         try {
             const listResponse: { data: { data: { attributes: { name: string }; relationships: Relationship[] } } } =
-                await axios.get(`https://api.mangadex.org/list/${listId}`);
+                await axios.get(`https://manga-proxy-chi.vercel.app/proxy/list/${listId}`);
 
             const mangaIds: string[] = listResponse.data.data.relationships
                 .filter((rel: Relationship) => rel.type === "manga")
@@ -29,7 +29,7 @@ export const fetchMangaSelfPublished = createAsyncThunk<
             };
 
             const mangaDetailsResponse: { data: { data: MangaDetails[] } } =
-                await axios.get(`https://api.mangadex.org/manga`, { params });
+                await axios.get(`https://manga-proxy-chi.vercel.app/proxy/manga`, { params });
 
             const mangaData = mangaDetailsResponse.data.data;
 
@@ -81,5 +81,5 @@ const listSlice = createSlice({
 })
 
 const { actions, reducer } = listSlice;
-
+export const {  } = actions;
 export default reducer;

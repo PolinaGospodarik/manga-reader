@@ -9,7 +9,7 @@
 
 .header.scrolled {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    border-bottom: 1px solid orangered;
+    border-bottom: 1px solid rgba(255, 103, 64);
 }
 
 .header-wrapper{

@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import "./NavigationButtons.css"
 import { useSwiper } from 'swiper/react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import {themeContext} from "@/roviders/ThemeContext";
 
 export const NavigationButtons = () => {
     const swiper = useSwiper();
+    const [color] = useContext(themeContext);
 
     const handlePrev = () => {
         swiper?.slidePrev();
@@ -17,10 +19,10 @@ export const NavigationButtons = () => {
 
     return (
         <>
-            <button className="custom-prev" onClick={handlePrev}>
+            <button className={`custom-prev text-${color}`} onClick={handlePrev}>
                 <FontAwesomeIcon icon={faChevronLeft} />
             </button>
-            <button className="custom-next" onClick={handleNext}>
+            <button className={`custom-next text-${color}`} onClick={handleNext}>
                 <FontAwesomeIcon icon={faChevronRight} />
             </button>
         </>

@@ -1,22 +1,34 @@
-import {Manga, Relationship} from "../types/types"
-//
-// export const getCoverUrls = (manga: Manga) =>{
-//
-//     const typesToFind = ['cover_art', 'author', 'artist'];
-//     const indexes = typesToFind.map((type) =>
-//         manga.relationships.findIndex(
-//             (relationship: Relationship) => relationship.type === type
-//         )
-//     );
-//     const [coverArtIndex, authorIndex, artistIndex] = indexes;
-//
-//     const cover = manga.relationships?.[coverArtIndex]?.attributes;
-//     const fileName = cover?.fileName;
-//
-//     const [coverUrl, backgroundUrl ] = fileName
-//         ? [
-//             `https://uploads.mangadex.org/covers/${manga.id}/${fileName}.256.jpg`,
-//             `https://uploads.mangadex.org/covers/${manga.id}/${fileName}`
-//         ] : [null, null];
-// }
+import axios from "axios";
+import {Relationship} from "@/types/types";
 
+export const fetchImage = async (url: string) => {
+    try {
+        const response = await axios.get(url);
+        return response.data;
+    } catch (err) {
+        console.error("Ошибка загрузки изображения:", err);
+    }
+};
+
+export const getProxedImgaes= (manga:any) => {
+    if (!manga || !manga.relationships) return [null, null];
+
+    const [coverArtIndex] = getIndexes(manga);
+    const cover = manga.relationships?.[coverArtIndex]?.attributes;
+    const fileName = cover?.fileName;
+
+    return fileName
+        ? [
+            `https://manga-proxy.netlify.app/images/cover/${manga.id}/${fileName}.256.jpg`,
+            `https://manga-proxy.netlify.app/images/cover/${manga.id}/${fileName}`
+        ] : [null, null];
+}
+
+export const getIndexes = (manga:any) =>{
+    const typesToFind = ['cover_art', 'author', 'artist'];
+    return typesToFind.map((type) =>
+        manga.relationships.findIndex(
+            (relationship: Relationship) => relationship.type === type
+        )
+    );
+}

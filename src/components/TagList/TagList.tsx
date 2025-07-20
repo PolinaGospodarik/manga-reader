@@ -4,9 +4,10 @@ import { Tag } from "../../types/types";
 
 interface TagListProps {
     tags: Tag[];
+    className?: string;
 }
 
-const TagList: React.FC<TagListProps> = ({ tags }) => {
+const TagList: React.FC<TagListProps> = ({ tags, className }) => {
     const getTagColor = (group: string):{ backgroundColor: string, color: string } => {
         const groupColors: Record<string, { backgroundColor: string, color: string }> = {
             genre: { backgroundColor: "#F0F1F2", color: "#000000" },
@@ -18,7 +19,7 @@ const TagList: React.FC<TagListProps> = ({ tags }) => {
     };
 
     return (
-        <span className="tag-list">
+        <span className={`tag-list ${className || ''}`}>
             {tags.map((tag, index) => (
                 <span
                     key={tag.id}

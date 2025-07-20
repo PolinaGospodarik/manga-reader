@@ -44,9 +44,18 @@
 }
 
 .slide-popular-left__img{
-    display: flex;
+    border-radius: 5px;
+    flex-shrink: 0;
+    width: 215px;
+    height: 300px;
+    overflow: hidden;
 }
 
+.slide-popular-left__img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 .slide-popular-right__text{
     width: 100%;
     margin-left: 20px;
@@ -67,7 +76,7 @@
 
 .text-top__description{
     margin-top: 10px;
-    max-height: 150px;
+    max-height: 200px;
     overflow-y: auto;
 }
 
@@ -76,25 +85,10 @@
     justify-content: space-between;
     align-items: center;
 }
-
-.text-bottom__creators{
-
-}
-
 .creators-author, .creators-artist{
     font-size: 18px;
 }
 
-.creators-artist{
 
-}
 
-.text-bottom__other{
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    align-items: center;
-}
-.other__navigation{
-    margin-left: 20px;
-}
+

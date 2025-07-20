@@ -1,0 +1,22 @@
+.libraries__tabs{
+    display: inline-block;
+    width: fit-content;
+    border-radius: 3px;
+    padding: 5px;
+}
+.libraries__tab{
+    font-size: 18px;
+    color: rgba(145, 145, 145, 0.76);
+    font-weight: 700;
+    font-family: 'Poppins','League Spartan', sans-serif;
+    padding: 4px 10px;
+    border-radius: 3px;
+}
+.libraries__tab:focus{
+    color: #fff;
+    background-color: #000;
+}
+.libraries__tab.active{
+    color: #fff;
+    background-color: #000;
+}

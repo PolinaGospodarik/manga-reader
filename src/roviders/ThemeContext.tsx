@@ -4,7 +4,7 @@ import {TContext} from "../types/types";
 export const themeContext = createContext<TContext>(["", () => {}]);
 
 const ThemeContext = ({children}: PropsWithChildren<{}>) => {
-    const [color, setColor] = useState("light");
+    const [color, setColor] = useState("dark");
     return (
         <div>
             <themeContext.Provider value={[color, setColor]}>
