@@ -1,12 +1,11 @@
 import React, { useContext, useState } from 'react';
-import LibrariesList from '../../components/LibrariesList/LibrariesList';
-import StatusTabs from '../../components/StatusTabs/StatusTabs';
 import './LibrariesPage.css';
+import LibrariesList from '@/components/LibrariesList/LibrariesList';
+import StatusTabs from '@/components/StatusTabs/StatusTabs';
 import {themeContext} from "@/roviders/ThemeContext";
 import {useNavigate} from "react-router-dom";
 import {useAppSelector} from "@/hooks";
 import AccentButton from "@/components/AccentButton/AccentButton";
-
 
 const STATUSES = [
     { label: 'Reading', value: 'reading' },
@@ -40,6 +39,7 @@ const LibrariesPage = () => {
                     <div className="libraries__not-auth">
                         <h2 className={`text-${color}`}>Please log in to view your library.</h2>
                         <AccentButton
+                            variant="orange"
                             className={`login-button`}
                             onClick={() => navigate('/login')}
                         >

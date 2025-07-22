@@ -1,15 +1,14 @@
 import React, {useContext} from 'react';
 import "./Pagination.css"
-import {PaginationSearch} from "../../types/types";
-import {useAppSelector} from "../../hooks";
-import {themeContext} from "../../roviders/ThemeContext";
+import {TPaginationSearch} from "@/types/types";
+import {useAppSelector} from "@/hooks";
+import {themeContext} from "@/roviders/ThemeContext";
 
-const Pagination: React.FC<PaginationSearch> = ({  limit, currentOffset, onPrev, onNext }) => {
+const Pagination: React.FC<TPaginationSearch> = ({  limit, currentOffset, onPrev, onNext }) => {
     const currentPage = Math.floor(currentOffset / limit) + 1;
     const totalPages = useAppSelector((state)=> state.search.totalPages);
 
     const [color] = useContext(themeContext);
-
 
     return (
         <div className="pagination">

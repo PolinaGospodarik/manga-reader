@@ -1,13 +1,13 @@
 import React, {useContext, useEffect} from 'react';
 import "./SearchPage.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import {fetchMangaByTitle, setCurrentOffset} from "../../redux/slice/search";
-import { Manga, Relationship } from "../../types/types";
-import { fetchMangaId } from "../../redux/slice/manga";
-import Search from "../../components/Search/Search";
-import Pagination from "../../components/Pagination/Pagination";
-import {themeContext} from "../../roviders/ThemeContext";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import {fetchMangaByTitle, setCurrentOffset} from "@/redux/slice/search";
+import { TManga, TRelationship } from "@/types/types";
+import { fetchMangaId } from "@/redux/slice/manga";
+import Search from "@/components/Search/Search";
+import Pagination from "@/components/Pagination/Pagination";
+import {themeContext} from "@/roviders/ThemeContext";
 import TagList from "@/components/TagList/TagList";
 
 const SearchPage = () => {
@@ -16,6 +16,8 @@ const SearchPage = () => {
     const navigate = useNavigate();
     const [color] = useContext(themeContext);
 
+    const loading = useAppSelector((state) => state.search.loading);
+
     const searchValue = new URLSearchParams(location.search).get('q') || '';
     const pageSearchValue = useAppSelector((state) => state.search.pageSearchValue);
     const searchResults = useAppSelector((state) => state.search.searchResults);
@@ -23,14 +25,13 @@ const SearchPage = () => {
     const totalResults = useAppSelector((state) => state.search.totalResults);
     const limit = useAppSelector((state) => state.search.limit);
 
-
     useEffect(() => {
         if (searchValue) {
             dispatch(fetchMangaByTitle({ title: searchValue, offset: currentOffset }));
         }
     }, [searchValue, currentOffset, dispatch]);
 
-    const handleClick = (manga: Manga) => {
+    const handleClick = (manga: TManga) => {
         dispatch(fetchMangaId(manga.id));
         navigate(`/manga/${manga.id}`);
     };
@@ -47,6 +48,15 @@ const SearchPage = () => {
         }
     };
 
+    if (loading) {
+        return (
+            <div className={`spinner-fullscreen background-${color}`}>
+                <div className="spinner-container spinner-container__img">
+                    <span className="loader"></span>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -60,7 +70,7 @@ const SearchPage = () => {
                         <>
                             {searchResults.map((manga) => {
                                 const coverArtIndex = manga.relationships.findIndex(
-                                    (relationship: Relationship) => relationship.type === 'cover_art'
+                                    (relationship: TRelationship) => relationship.type === 'cover_art'
                                 );
                                 const cover = manga.relationships?.[coverArtIndex]?.attributes;
                                 const fileName = cover?.fileName;

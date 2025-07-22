@@ -1,0 +1,20 @@
+.chapters__title{
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+.chapters__list{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.chapters__item{
+    display: inline-block;
+    width: fit-content;
+}
+
+.chapters__item-link{
+    text-decoration:none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}

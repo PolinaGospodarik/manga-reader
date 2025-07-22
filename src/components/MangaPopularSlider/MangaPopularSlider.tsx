@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 import "./MangaPopularSlider.css";
 
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { fetchMangaPopular } from "../../redux/slice/manga";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { fetchMangaPopular } from "@/redux/slice/manga";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -31,7 +31,9 @@ const MangaPopularSlider = () => {
         <>
             <div className="manga-slider">
                 {loading ? (
-                    <div className="loading">Загрузка манги...</div>
+                    <div className="spinner-container spinner-container__img">
+                        <span className="loader"></span>
+                    </div>
                 ) : error ? (
                     <div className="error">{error}</div>
                 ) : mangaPopular && mangaPopular.length > 0 ? (
@@ -59,7 +61,7 @@ const MangaPopularSlider = () => {
                         </Swiper>
                     </>
                 ) : (
-                    <div>Нет доступной манги</div>
+                    <div>No manga available</div>
                 )}
             </div>
         </>

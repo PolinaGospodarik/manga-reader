@@ -1,5 +1,5 @@
 import {createContext, PropsWithChildren, useState} from "react";
-import {TContext} from "../types/types";
+import {TContext} from "@/types/types";
 
 export const themeContext = createContext<TContext>(["", () => {}]);
 

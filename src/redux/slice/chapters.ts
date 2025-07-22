@@ -1,26 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "@/redux/store/store";
+import {TChapter, TChaptersState} from "@/types/types"
 
-type Chapter = {
-    id: string;
-    chapter: string | null;
-    title: string | null;
-    volume: string | null;
-};
+const BASE_URL = 'https://manga-proxy-chi.vercel.app/proxy';
 
-type ChaptersState = {
-    chapters: Chapter[];
-    loading: boolean;
-    error: string | null;
-
-    // Для изображений выбранной главы:
-    chapterImages: string[];
-    imagesLoading: boolean;
-    imagesError: string | null;
-};
-
-const initialState: ChaptersState = {
+const initialState: TChaptersState = {
     chapters: [],
     loading: false,
     error: null,
@@ -31,43 +16,55 @@ const initialState: ChaptersState = {
 };
 
 export const fetchMangaChapters = createAsyncThunk<
-    Chapter[],
+    TChapter[],
     { mangaId: string; languages: string[] },
     { state: RootState }
 >(
     'chapters/fetchMangaChapters',
     async ({ mangaId, languages }, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`https://manga-proxy-chi.vercel.app/proxy/manga/${mangaId}/feed`, {
+            const response = await axios.get(`${BASE_URL}/manga/${mangaId}/feed`, {
                 params: {
                     translatedLanguage: languages,
                     order: { chapter: 'asc' },
-                    limit: 20,
+                    limit: 500,
                 },
             });
 
-            return response.data.data.map((chapter: any) => ({
-                id: chapter.id,
-                chapter: chapter.attributes.chapter,
-                title: chapter.attributes.title,
-                volume: chapter.attributes.volume,
-            }));
+            const allChapters = response.data.data;
+            const uniqueChaptersMap = new Map<string, TChapter>();
+
+            for (const chapter of allChapters) {
+                const chapterNumber = chapter.attributes.chapter;
+
+                if (!chapterNumber) continue;
+
+                if (!uniqueChaptersMap.has(chapterNumber)) {
+                    uniqueChaptersMap.set(chapterNumber, {
+                        id: chapter.id,
+                        chapter: chapter.attributes.chapter,
+                        title: chapter.attributes.title,
+                        volume: chapter.attributes.volume,
+                    });
+                }
+            }
+
+            return Array.from(uniqueChaptersMap.values());
         } catch (error: any) {
             return rejectWithValue(error.message || "Failed to fetch chapters");
         }
     }
 );
 
-// Новый thunk для загрузки изображений главы
 export const fetchChapterImages = createAsyncThunk<
-    string[], // массив url изображений
+    string[],
     { chapterId: string; quality?: 'data' | 'data-saver' },
     { rejectValue: string }
 >(
     'chapters/fetchChapterImages',
     async ({ chapterId, quality = 'data' }, { rejectWithValue }) => {
         try {
-            const res = await axios.get(`https://manga-proxy-chi.vercel.app/proxy/at-home/server/${chapterId}`);
+            const res = await axios.get(`${BASE_URL}/at-home/server/${chapterId}`);
             const { baseUrl, chapter } = res.data;
 
             const hash = chapter.hash;
@@ -86,11 +83,7 @@ const chaptersSlice = createSlice({
     name: "chapters",
     initialState,
     reducers: {
-        clearChapterImages(state) {
-            state.chapterImages = [];
-            state.imagesError = null;
-            state.imagesLoading = false;
-        }
+
     },
     extraReducers: (builder) => {
         builder
@@ -107,7 +100,6 @@ const chaptersSlice = createSlice({
                 state.error = action.payload as string;
             })
 
-            // Загрузка изображений главы
             .addCase(fetchChapterImages.pending, (state) => {
                 state.imagesLoading = true;
                 state.imagesError = null;
@@ -124,5 +116,5 @@ const chaptersSlice = createSlice({
     },
 });
 
-export const { clearChapterImages } = chaptersSlice.actions;
+export const {  } = chaptersSlice.actions;
 export default chaptersSlice.reducer;

@@ -7,14 +7,14 @@ import "../src/utils/axiosInterceptor"
 import LoginPage from "./pages/LoginPage/LoginPage";
 import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
-import MangaItem from "./components/MangaItem/MangaItem";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import ThemeContext from "./roviders/ThemeContext";
-import TestPage from "./pages/SearchPage/TestPage";
-import LibrariesPage from "@/pages/FavoritesPage/LibrariesPage";
+import LibrariesPage from "@/pages/LibrariesPage/LibrariesPage";
 import {useAppDispatch} from "@/hooks";
 import {initializeUser} from "@/redux/slice/users";
 import ChapterPage from "@/pages/ChapterPage/ChapterPage";
+import MangaPage from "@/pages/MangaPage/MangaPage";
+import Footer from "@/components/Footer/Footer";
 
 const AppContent = () => {
     const location = useLocation();
@@ -31,12 +31,12 @@ const AppContent = () => {
             <Routes>
                 <Route path="/" element={<HomePage/>} />
                 <Route path="/login" element={<LoginPage/>} />
-                <Route path="/manga/:id" element={<MangaItem/>} />
+                <Route path="/manga/:id" element={<MangaPage/>} />
                 <Route path="/search" element={<SearchPage/>} />
                 <Route path="/favorites" element={<LibrariesPage/>} />
                 <Route path="/chapter/:chapterId" element={<ChapterPage/>} />
-
             </Routes>
+            {!isLoginPage && <Footer/>}
         </>
     );
 }

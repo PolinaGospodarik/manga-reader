@@ -1,22 +1,19 @@
 import React, { useEffect, useState, useContext } from 'react';
+import "./LibrariesList.css";
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import {fetchLibraries} from '@/redux/slice/libraries';
+import {fetchLibraries, removeFromLibrary} from '@/redux/slice/libraries';
 import { fetchMangaId } from '@/redux/slice/manga';
 import { fetchImage, getProxedImgaes } from '@/utils/useCoverUrls';
 import { themeContext } from '@/roviders/ThemeContext';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faBookmark} from '@fortawesome/free-regular-svg-icons';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import "./LibrariesList.css";
+import { TLibrariesList } from "@/types/types";
 import {getTokensFromLocalStorage} from "@/utils/authUtils";
 import {Link} from "react-router-dom";
 
-type LibrariesListType = {
-    status: string;
-    user?: boolean;
-};
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar, faBookmark} from '@fortawesome/free-regular-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
-const LibrariesList: React.FC<LibrariesListType> = ({ status, user }) => {
+const LibrariesList: React.FC<TLibrariesList> = ({ status, user }) => {
     const dispatch = useAppDispatch();
     const [color] = useContext(themeContext);
     const { libraries, loading } = useAppSelector(state => state.libraries);
@@ -55,12 +52,15 @@ const LibrariesList: React.FC<LibrariesListType> = ({ status, user }) => {
         fetchDetails();
     }, [status, libraries, dispatch]);
 
-    // const handleRemove = (mangaId: string) => {
-    //     const { accessToken } = getTokensFromLocalStorage();
-    //     if (!accessToken) return;
-    //
-    //     dispatch(removeFromLibrary({ mangaId, sessionToken: accessToken }));
-    // };
+    const handleRemove = async (e: React.MouseEvent, mangaId: string) => {
+        e.preventDefault();
+        const { accessToken } = getTokensFromLocalStorage();
+        if (!accessToken) return alert("No access token");
+
+        await dispatch(removeFromLibrary({ mangaId, sessionToken: accessToken }));
+        setFilteredManga(prev => prev.filter(m => m.data.id !== mangaId));
+    };
+
     useEffect(() => {
         filteredManga.forEach(manga => {
             const [coverUrl] = getProxedImgaes(manga.data);
@@ -76,7 +76,9 @@ const LibrariesList: React.FC<LibrariesListType> = ({ status, user }) => {
     return (
         <div className={`libraries__wrapper background-${color}`}>
             {loading || loadingDetails ? (
-                <p className={`libraries__message text-${color}`}>Loading...</p>
+                <div className="spinner-container">
+                    <span className="loader"></span>
+                </div>
             ) : !filteredManga.length ? (
                 <p className={`libraries__message text-${color}`}>
                     No titles
@@ -90,24 +92,26 @@ const LibrariesList: React.FC<LibrariesListType> = ({ status, user }) => {
                                     <img
                                         className="libraries-item__img"
                                         src={imagesMap[manga.data.id]}
-                                        alt={manga.data.attributes.title.en || 'Обложка'}
+                                        alt={manga.data.attributes.title.en || 'Cover'}
                                     />
                                 ) : (
-                                    <p>Обложка загружается...</p>
+                                    <div className="spinner-container">
+                                        <span className="loader"></span>
+                                    </div>
                                 )}
                             </div>
                             <div className="libraries-item-info">
                                 <div className="libraries-item-info__top">
                                     <h3 className={`libraries-item-info__title text-${color}`}>
-                                        {manga.data.attributes.title.en || 'Без названия'}
+                                        {manga.data.attributes.title.en || 'Untitled'}
                                     </h3>
-                                    {/*<button*/}
-                                    {/*    className="libraries-item__remove"*/}
-                                    {/*    // onClick={() => handleRemove(manga.data.id)}*/}
-                                    {/*    title="Remove from library"*/}
-                                    {/*>*/}
-                                    {/*    <FontAwesomeIcon className={`libraries-item__remove-icon text-${color}`} icon={faXmark} />*/}
-                                    {/*</button>*/}
+                                    <button
+                                        className="libraries-item__remove"
+                                        onClick={(e) => handleRemove(e,manga.data.id)}
+                                        title="Remove from library"
+                                    >
+                                        <FontAwesomeIcon className={`libraries-item__remove-icon text-${color}`} icon={faXmark} />
+                                    </button>
                                 </div>
                                 <div className="library-item__meta">
                                     <div className="library-item__stat">

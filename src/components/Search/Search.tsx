@@ -2,16 +2,16 @@ import React, {useContext} from 'react';
 import "./Search.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import {
     clearSearch,
     fetchMangaByTitle,
     setSearchValue,
     setCurrentOffset,
     setPageSearchValue, clearPageSearch
-} from "../../redux/slice/search";
+} from "@/redux/slice/search";
 import {useNavigate} from "react-router-dom";
-import {themeContext} from "../../roviders/ThemeContext";
+import {themeContext} from "@/roviders/ThemeContext";
 
 const Search = () => {
     const dispatch = useAppDispatch();
@@ -51,12 +51,12 @@ const Search = () => {
                     className="search-page__button"
                     onClick={handleClearSearch}
                 >
-                    <FontAwesomeIcon icon={faTimes} />
+                    <FontAwesomeIcon className={`text-${color}`} icon={faTimes} />
                 </button>
             )}
             {!searchPageValue && (
                 <button type="button" className="search-page__button">
-                    <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    <FontAwesomeIcon className={`text-${color}`} icon={faMagnifyingGlass} />
                 </button>
             )}
         </div>

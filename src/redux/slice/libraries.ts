@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { AddToLibrariesParams, Library, LibraryItem } from "@/types/types";
+import { TAddToLibrariesParams, TLibrary, TLibraryItem } from "@/types/types";
 import {getTokensFromLocalStorage} from "@/utils/authUtils";
 
 const BASE_URL = 'https://manga-proxy-chi.vercel.app/proxy';
 
 export const addToLibrary = createAsyncThunk<
-    LibraryItem,
-    AddToLibrariesParams,
+    TLibraryItem,
+    TAddToLibrariesParams,
     { rejectValue: string }
 >(
     'favorites/addToFavorites',
@@ -25,13 +25,13 @@ export const addToLibrary = createAsyncThunk<
             );
             return { mangaId, status };
         } catch (error: any) {
-            return rejectWithValue(error.response?.data || 'Ошибка при добавлении в избранное');
+            return rejectWithValue(error.response?.data || 'Error adding to libraries');
         }
     }
 );
 
 export const fetchLibraries = createAsyncThunk<
-    LibraryItem[],
+    TLibraryItem[],
     string,
     { rejectValue: string }
 >(
@@ -40,12 +40,12 @@ export const fetchLibraries = createAsyncThunk<
         const { accessToken } = getTokensFromLocalStorage();
 
         if (!accessToken) {
-            return rejectWithValue('Пользователь не авторизован');
+            return rejectWithValue('User is not authorized');
         }
 
         try {
             const response = await axios.get(
-                `https://api.mangadex.org/manga/status?status=${status.toLowerCase()}`,
+                `${BASE_URL}/manga/status?status=${status.toLowerCase()}`,
                 {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
@@ -54,13 +54,11 @@ export const fetchLibraries = createAsyncThunk<
             );
 
             const data = response.data.statuses;
-            console.log('fetchLibraries response:', response.data);
-
 
             const validStatuses = ['reading', 'on_hold', 'plan_to_read', 'dropped', 're_reading', 'completed'] as const;
             type ValidStatus = typeof validStatuses[number];
 
-            const libraries: LibraryItem[] = Object.entries(data).map(([mangaId, status]) => {
+            const libraries: TLibraryItem[] = Object.entries(data).map(([mangaId, status]) => {
                 if (validStatuses.includes(status as ValidStatus)) {
                     return {
                         mangaId,
@@ -75,37 +73,33 @@ export const fetchLibraries = createAsyncThunk<
 
             return libraries;
         } catch (error: any) {
-            return rejectWithValue('Не удалось загрузить избранное');
+            return rejectWithValue('Failed to load favorites');
         }
     }
 );
 
-// export const removeFromLibrary = createAsyncThunk<
-//     string,
-//     { mangaId: string, sessionToken: string },
-//     { rejectValue: string }
-// >(
-//     'favorites/removeFromFavorites',
-//     async ({ mangaId, sessionToken }, { rejectWithValue }) => {
-//         try {
-//             await axios.post(
-//                 `${BASE_URL}/manga/${mangaId}/status`,
-//                 { status: null },
-//                 {
-//                     headers: {
-//                         'Content-Type': 'application/json',
-//                         Authorization: `Bearer ${sessionToken}`,
-//                     },
-//                 }
-//             );
-//             return mangaId;
-//         } catch (error: any) {
-//             return rejectWithValue(error.response?.data || 'Ошибка при удалении из избранного');
-//         }
-//     }
-// );
+export const removeFromLibrary = createAsyncThunk<
+    void,
+    { mangaId: string; sessionToken: string },
+    { rejectValue: string }
+>('libraries/removeFromLibrary', async ({ mangaId, sessionToken }, { rejectWithValue }) => {
+    try {
+        await axios.put(
+            `${BASE_URL}/manga/${mangaId}/status`,
+            { status: null },
+            {
+                headers: {
+                    Authorization: `Bearer ${sessionToken}`,
+                },
+            }
+        );
+    } catch (error: any) {
+        return rejectWithValue(error.message || "Failed to remove from library");
+    }
+});
 
-const initialState: Library = {
+
+const initialState: TLibrary = {
     libraries: [],
     loading: false,
     error: null,
@@ -133,7 +127,7 @@ const librariesSlice = createSlice({
             })
             .addCase(addToLibrary.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload ?? 'Неизвестная ошибка';
+                state.error = action.payload ?? 'Unknown error';
             })
 
             .addCase(fetchLibraries.pending, (state) => {
@@ -146,20 +140,22 @@ const librariesSlice = createSlice({
             })
             .addCase(fetchLibraries.rejected, (state, {payload}) => {
                 state.loading = false;
-                state.error = payload || 'Произошла ошибка';
+                state.error = payload || 'An error occurred';
             })
 
-            // .addCase(removeFromLibrary.pending, (state) => {
-            //     state.loading = true;
-            //     state.error = null;
-            // })
-            // .addCase(removeFromLibrary.fulfilled, (state, { payload: mangaId }) => {
-            //     state.libraries = state.libraries.filter(item => item.mangaId !== mangaId);
-            // })
-            // .addCase(removeFromLibrary.rejected, (state, {payload}) => {
-            //     state.loading = false;
-            //     state.error = payload || 'Произошла ошибка';
-            // })
+            .addCase(removeFromLibrary.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(removeFromLibrary.fulfilled, (state, action) => {
+                state.loading = false;
+                const mangaId = action.meta.arg.mangaId;
+                state.libraries = state.libraries.filter(item => item.mangaId !== mangaId);
+            })
+            .addCase(removeFromLibrary.rejected, (state, { payload }) => {
+                state.loading = false;
+                state.error = payload || 'An error occurred';
+            })
 
     },
 });

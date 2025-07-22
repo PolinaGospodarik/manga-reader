@@ -1,11 +1,12 @@
 import React, {useContext, useState} from 'react';
 import './LibraryModal.css';
-import { LibraryModalType } from "@/types/types.js"
+import CustomSelect from "@/components/CustomSelect/CustomSelect";
+import {themeContext} from "@/roviders/ThemeContext";
+import { TLibraryModal } from "@/types/types.js";
+
 import AccentButton from "@/components/AccentButton/AccentButton";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import CustomSelect from "@/components/CustomSelect/CustomSelect";
-import {themeContext} from "@/roviders/ThemeContext";
 
 const statusMap: Record<string, string> = {
     'Reading': 'reading',
@@ -16,7 +17,7 @@ const statusMap: Record<string, string> = {
     'Re-Reading': 're_reading',
 };
 
-const LibraryModal: React.FC<LibraryModalType> = ({ imageSrc, title, onConfirm, onCancel }) => {
+const LibraryModal: React.FC<TLibraryModal> = ({ imageSrc, title, onConfirm, onCancel }) => {
     const [selectedStatus, setSelectedStatus] = useState('Reading');
     const [color] = useContext(themeContext);
 
@@ -51,6 +52,7 @@ const LibraryModal: React.FC<LibraryModalType> = ({ imageSrc, title, onConfirm, 
                     <div className="modal-actions">
                         <button className={`modal-actions__button grey-${color} selection-${color} text-${color}`} onClick={onCancel}>Cancel</button>
                         <AccentButton
+                            variant="orange"
                             className="modal-actions__button"
                             onClick={() => onConfirm(statusMap[selectedStatus] || 'reading')}
                         >

@@ -1,8 +1,8 @@
 import React from 'react';
 import "./LoginPage.css"
-import Login from "../../components/Login/Login"
-import logoImg from "../../img/mangadex-logo.svg"
-import logoText from "../../img/mangadex-wordmark-white.svg"
+import Login from "@/components/Login/Login"
+import logoImg from "@/img/mangadex-logo.svg"
+import logoText from "@/img/mangadex-wordmark-white.svg"
 import {useNavigate} from "react-router-dom";
 
 const LoginPage = () => {

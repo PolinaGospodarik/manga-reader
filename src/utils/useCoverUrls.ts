@@ -1,5 +1,5 @@
 import axios from "axios";
-import {Relationship} from "@/types/types";
+import {TRelationship} from "@/types/types";
 
 export const fetchImage = async (url: string) => {
     try {
@@ -28,7 +28,7 @@ export const getIndexes = (manga:any) =>{
     const typesToFind = ['cover_art', 'author', 'artist'];
     return typesToFind.map((type) =>
         manga.relationships.findIndex(
-            (relationship: Relationship) => relationship.type === type
+            (relationship: TRelationship) => relationship.type === type
         )
     );
 }

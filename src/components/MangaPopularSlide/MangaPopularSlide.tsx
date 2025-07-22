@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import "./MangaPopularSlide.css"
-import {Manga} from "@/types/types";
+import {TManga} from "@/types/types";
 import TagList from "../TagList/TagList";
 
 import 'swiper/css';
@@ -8,19 +8,23 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import {useNavigate} from "react-router-dom";
-import {useAppDispatch} from "@/hooks";
+import {useAppDispatch, useAppSelector} from "@/hooks";
 import {fetchMangaId} from "@/redux/slice/manga";
 import {themeContext} from "@/roviders/ThemeContext";
 import {fetchImage, getIndexes, getProxedImgaes} from "@/utils/useCoverUrls";
 
 
-const MangaPopularSlide = ({manga, index}:{manga: Manga, index: number}) => {
+const MangaPopularSlide = ({manga}:{manga: TManga, index: number}) => {
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [color] = useContext(themeContext);
     const [imageSrc, setImageSrc] = useState(null);
     const [background, setBackgroundeSrc] = useState(null);
+
+    const loading = useAppSelector(state => state.manga.loading);
+    const error = useAppSelector(state => state.manga.error);
+
 
     const [coverUrl, backgroundUrl] = getProxedImgaes(manga);
     const [authorIndex, artistIndex] = getIndexes(manga);
@@ -42,10 +46,16 @@ const MangaPopularSlide = ({manga, index}:{manga: Manga, index: number}) => {
                     <div className={`popular-title text-${color}`}>Popular New Titles</div>
                     <div className="slide-popular-wrapper" >
                         <a className="slide-popular-left__img" onClick={handleClick}>
-                            {imageSrc ? (
-                                <img src={String(imageSrc)} alt={manga.attributes?.title?.en || 'Cover'}/>
+                            {loading ? (
+                                <div className="spinner-container spinner-container__img">
+                                    <span className="loader"></span>
+                                </div>
+                            ) : error ? (
+                                <p>Cover not available</p>
+                            ) : imageSrc ? (
+                                <img src={imageSrc} alt={manga.attributes?.title?.en || "Cover"} />
                             ) : (
-                                <p>Обложка не доступна</p>
+                                <p>Cover not available</p>
                             )}
                         </a>
                         <div className="slide-popular-right__text">

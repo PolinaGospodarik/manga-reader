@@ -1,23 +1,22 @@
 import React, {useContext, useEffect} from 'react';
 import './MangaSlider.css';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import MangaSlide from '../MangaSlide/MangaSlide';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import {TMangaDetails, TMangaSlider} from '@/types/types';
+import {themeContext} from "@/roviders/ThemeContext";
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Pagination } from 'swiper/modules';
-import { fetchMangaSelfPublished } from '../../redux/slice/list';
-import MangaSlide from '../MangaSlide/MangaSlide';
-import {MangaDetails} from '../../types/types';
-import {themeContext} from "@/roviders/ThemeContext";
+import { fetchMangaSelfPublished } from '@/redux/slice/list';
 
-interface MangaSliderProps {
-    listId: string;
-    slidesPerView?: number;
-}
 
-const MangaSlider: React.FC<MangaSliderProps> = ({ listId, slidesPerView= 5}) => {
+
+
+const MangaSlider: React.FC<TMangaSlider> = ({ listId, slidesPerView= 5}) => {
     const dispatch = useAppDispatch();
     const [color] = useContext(themeContext);
 
@@ -40,13 +39,15 @@ const MangaSlider: React.FC<MangaSliderProps> = ({ listId, slidesPerView= 5}) =>
         <div className="slider">
             <div className="container">
                 <div className={`slider__text text-${color}`}>
-                    <h3>{listName || 'Загрузка...'}</h3>
+                    <h3>{listName || 'Loading...'}</h3>
                 </div>
 
                 {loading ? (
-                    <div>Загрузка...</div>
+                    <div className="spinner-container spinner-container__img">
+                        <span className="loader"></span>
+                    </div>
                 ) : error ? (
-                    <div>{`Ошибка: ${error}`}</div>
+                    <div>{`Error: ${error}`}</div>
                 ) : (
                     <Swiper
                         spaceBetween={20}
@@ -59,13 +60,13 @@ const MangaSlider: React.FC<MangaSliderProps> = ({ listId, slidesPerView= 5}) =>
                         }}
                     >
                         {mangaData && mangaData.length > 0 ? (
-                            mangaData.map((manga: MangaDetails, index: number) => (
+                            mangaData.map((manga: TMangaDetails, index: number) => (
                                 <SwiperSlide key={manga.id}>
                                     <MangaSlide manga={manga} index={index}/>
                                 </SwiperSlide>
                             ))
                         ) : (
-                            <div>Нет доступной манги</div>
+                            <div>No manga available</div>
                         )}
                     </Swiper>
                 )}

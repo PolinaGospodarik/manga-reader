@@ -1,13 +1,8 @@
 import React from 'react';
 import "./TagList.css"
-import { Tag } from "../../types/types";
+import {TTagList} from "@/types/types";
 
-interface TagListProps {
-    tags: Tag[];
-    className?: string;
-}
-
-const TagList: React.FC<TagListProps> = ({ tags, className }) => {
+const TagList: React.FC<TTagList> = ({ tags, className }) => {
     const getTagColor = (group: string):{ backgroundColor: string, color: string } => {
         const groupColors: Record<string, { backgroundColor: string, color: string }> = {
             genre: { backgroundColor: "#F0F1F2", color: "#000000" },

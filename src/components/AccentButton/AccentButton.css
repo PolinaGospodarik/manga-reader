@@ -1,7 +1,7 @@
 .orange-button {
     background-color: rgb(255,103,64);
     color: #ffffff;
-    border-radius: 5px; /* полностью скруглённая */
+    border-radius: 5px;
     font-size: 20px;
     font-family: "League Spartan", sans-serif;
     padding: 20px 35px;
@@ -17,3 +17,6 @@
     background-color: #ccc;
     cursor: not-allowed;
 }
+
+
+

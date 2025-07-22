@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Select, { SingleValue } from 'react-select';
-import { CustomSelectType } from "@/types/types";
+import { TCustomSelect,TOption } from "@/types/types";
 import { themeContext } from "@/roviders/ThemeContext";
 
 const statusOptions = [
@@ -12,20 +12,18 @@ const statusOptions = [
     { value: 'Re-Reading', label: 'Re-Reading' },
 ];
 
-type OptionType = { value: string; label: string };
-
-const CustomSelect: React.FC<CustomSelectType> = ({ defaultValue, onChange }) => {
+const CustomSelect: React.FC<TCustomSelect> = ({ defaultValue, onChange }) => {
     const [color] = useContext(themeContext);
     const isDark = color === "dark";
 
     const initialOption = statusOptions.find(opt => opt.value === defaultValue) || statusOptions[0];
-    const [selectedOption, setSelectedOption] = useState<OptionType>(initialOption);
+    const [selectedOption, setSelectedOption] = useState<TOption>(initialOption);
 
     useEffect(() => {
-        onChange(selectedOption.value); // 👉 передаём в родителя
+        onChange(selectedOption.value);
     }, [selectedOption, onChange]);
 
-    const handleChange = (newValue: SingleValue<OptionType>) => {
+    const handleChange = (newValue: SingleValue<TOption>) => {
         if (newValue) {
             setSelectedOption(newValue);
         }

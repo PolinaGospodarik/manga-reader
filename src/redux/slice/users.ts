@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axios from 'axios';
-import {AuthResponse, UsersState} from "@/types/types";
+import {TAuthResponse, TUsersState} from "@/types/types";
 import {getTokensFromLocalStorage, removeTokensFromLocalStorage, saveTokensToLocalStorage} from "@/utils/authUtils";
 
 const API_URL = 'https://manga-proxy-chi.vercel.app/auth/realms/mangadex/protocol/openid-connect/token';
@@ -11,7 +11,7 @@ function getAuthHeaders() {
     return { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
 }
 // Логин
-export const login = createAsyncThunk<AuthResponse, { username: string; password: string }, { rejectValue: string }>(
+export const login = createAsyncThunk<TAuthResponse, { username: string; password: string }, { rejectValue: string }>(
     'users/login',
     async ({ username, password }, { rejectWithValue }) => {
         const creds = new URLSearchParams({
@@ -22,21 +22,21 @@ export const login = createAsyncThunk<AuthResponse, { username: string; password
             client_secret: CLIENT_SECRET,
         });
         try {
-            const response = await axios.post<AuthResponse>(API_URL, creds, getAuthHeaders());
+            const response = await axios.post<TAuthResponse>(API_URL, creds, getAuthHeaders());
             const { access_token, refresh_token } = response.data;
             saveTokensToLocalStorage(access_token, refresh_token);
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                return rejectWithValue(error.response?.data.message || 'Неверный логин или пароль');
+                return rejectWithValue(error.response?.data.message || 'Incorrect login or password');
             }
-            return rejectWithValue('Неизвестная ошибка');
+            return rejectWithValue('Unknown error');
         }
     }
 );
 
 // Обновление токена
-export const refreshAccessToken = createAsyncThunk<AuthResponse, { refresh_token: string }, { rejectValue: string }>(
+export const refreshAccessToken = createAsyncThunk<TAuthResponse, { refresh_token: string }, { rejectValue: string }>(
     'users/refreshAccessToken',
     async ({ refresh_token }, { rejectWithValue }) => {
         const creds = new URLSearchParams({
@@ -46,15 +46,15 @@ export const refreshAccessToken = createAsyncThunk<AuthResponse, { refresh_token
             client_secret: CLIENT_SECRET,
         });
         try {
-            const response = await axios.post<AuthResponse>(API_URL, creds, getAuthHeaders());
+            const response = await axios.post<TAuthResponse>(API_URL, creds, getAuthHeaders());
             const { access_token, refresh_token } = response.data;
             saveTokensToLocalStorage(access_token, refresh_token);
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                return rejectWithValue(error.response?.data.message || 'Неизвестная ошибка');
+                return rejectWithValue(error.response?.data.message || 'Unknown error');
             }
-            return rejectWithValue('Неизвестная ошибка');
+            return rejectWithValue('Unknown error');
         }
     }
 );
@@ -67,7 +67,7 @@ const usersSlice = createSlice({
         loading: false,
         error: null,
         permissions: [] as string[]
-    } as UsersState,
+    } as TUsersState,
     reducers: {
         logout: (state) => {
             state.error = null;
@@ -85,28 +85,25 @@ const usersSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(login.fulfilled, (state, {payload}) => {
+            .addCase(login.fulfilled, (state) => {
                 state.loading = false;
                 state.user = true;
-                // state.access_token =payload.access_token;
-                // state.refresh_token =payload.refresh_token;
             })
             .addCase(login.rejected, (state, {payload}) => {
                 state.loading = false;
                 state.user = false;
-                state.error = payload || 'Ошибка при выполнении входа';
+                state.error = payload || 'Error while logging in';
             })
             .addCase(refreshAccessToken.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(refreshAccessToken.fulfilled, (state, {payload}) => {
+            .addCase(refreshAccessToken.fulfilled, (state) => {
                 state.loading = false;
-                // state.access_token = payload.access_token;
             })
             .addCase(refreshAccessToken.rejected, (state, {payload}) => {
                 state.loading = false;
-                state.error = payload || 'Ошибка при обновлении токена';
+                state.error = payload || 'Error updating token';
             })
 
     }

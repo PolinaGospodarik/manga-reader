@@ -1,21 +1,23 @@
 import { createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axios from 'axios';
-import {ListState, MangaDetails, Relationship} from "../../types/types";
+import {TListState, TMangaDetails, TRelationship} from "@/types/types";
+
+const BASE_URL = 'https://manga-proxy-chi.vercel.app/proxy';
 
 export const fetchMangaSelfPublished = createAsyncThunk<
-    { listId: string, mangaData: MangaDetails[], listName: string },
+    { listId: string, mangaData: TMangaDetails[], listName: string },
     { listId: string, contentRating: string[] },
     { rejectValue: string }
 >(
     "list/fetchMangaSelfPublished",
     async ({ listId, contentRating }, { rejectWithValue }) => {
         try {
-            const listResponse: { data: { data: { attributes: { name: string }; relationships: Relationship[] } } } =
-                await axios.get(`https://manga-proxy-chi.vercel.app/proxy/list/${listId}`);
+            const listResponse: { data: { data: { attributes: { name: string }; relationships: TRelationship[] } } } =
+                await axios.get(`${BASE_URL}/list/${listId}`);
 
             const mangaIds: string[] = listResponse.data.data.relationships
-                .filter((rel: Relationship) => rel.type === "manga")
-                .map((rel: Relationship) => rel.id);
+                .filter((rel: TRelationship) => rel.type === "manga")
+                .map((rel: TRelationship) => rel.id);
 
             const params = {
                 ids: mangaIds,
@@ -28,8 +30,8 @@ export const fetchMangaSelfPublished = createAsyncThunk<
                 hasAvailableChapters: true,
             };
 
-            const mangaDetailsResponse: { data: { data: MangaDetails[] } } =
-                await axios.get(`https://manga-proxy-chi.vercel.app/proxy/manga`, { params });
+            const mangaDetailsResponse: { data: { data: TMangaDetails[] } } =
+                await axios.get(`${BASE_URL}/manga`, { params });
 
             const mangaData = mangaDetailsResponse.data.data;
 
@@ -41,15 +43,15 @@ export const fetchMangaSelfPublished = createAsyncThunk<
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.error('Axios error details:', error.response?.data);
-                return rejectWithValue(error.response?.data.message || 'Неизвестная ошибка');
+                return rejectWithValue(error.response?.data.message || 'Unknown error');
             }
             console.error('Unknown error details:', error);
-            return rejectWithValue('Неизвестная ошибка');
+            return rejectWithValue('Unknown error');
             }
     }
 );
 
-const initialState: ListState = {
+const initialState: TListState = {
     mangaSelfPublished: {},
     loading: false,
     error: null
@@ -71,11 +73,10 @@ const listSlice = createSlice({
                     mangaData: payload.mangaData,
                     listName: payload.listName
                 };
-                // console.log(payload);
             })
             .addCase(fetchMangaSelfPublished.rejected, (state, { payload }) => {
                 state.loading = false;
-                state.error = payload || 'Ошибка при загрузке манги';
+                state.error = payload || 'Error loading manga';
             })
     }
 })

@@ -1,14 +1,14 @@
 import React, {useState, useEffect, useContext, useRef} from 'react';
 import "./Header.css";
-import logoImg from "../../img/mangadex-logo.svg";
-import logoTextBlack from "../../img/mangadex-wordmark-black.svg";
-import logoTextWhite from "../../img/mangadex-wordmark-white.svg";
-import avatarDefault from "../../img/avatar.png"
-import { useNavigate } from "react-router-dom";
 import SearchInput from "../SearchInput/SearchInput";
 import DropDown from "../DropDown/DropDown";
-import {useAppSelector} from "../../hooks";
-import {themeContext} from "../../roviders/ThemeContext";
+import logoImg from "@/img/mangadex-logo.svg";
+import logoTextBlack from "@/img/mangadex-wordmark-black.svg";
+import logoTextWhite from "@/img/mangadex-wordmark-white.svg";
+import avatarDefault from "@/img/avatar.png"
+import { useNavigate } from "react-router-dom";
+import {useAppSelector} from "@/hooks";
+import {themeContext} from "@/roviders/ThemeContext";
 
 const Header = () => {
     const [isScrolled, setIsScrolled] = useState(false);

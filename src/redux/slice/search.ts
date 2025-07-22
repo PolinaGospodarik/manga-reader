@@ -1,17 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios, {AxiosResponse} from 'axios';
-import {Manga, MangaSearch, SearchState} from "../../types/types";
+import {TManga, TMangaSearch, TSearchState} from "@/types/types";
+
+const BASE_URL = 'https://manga-proxy-chi.vercel.app/proxy';
 
 export const fetchMangaByTitle = createAsyncThunk<
-    { mangas: Manga[], totalResults: number},
+    { mangas: TManga[], totalResults: number},
     { title: string, offset: number },
     { rejectValue: string }
 >(
     "manga/fetchMangaByTitlePagination",
     async ({ title, offset },   { rejectWithValue }) => {
         try {
-            const response: AxiosResponse<MangaSearch> = await axios.get(
-                "https://manga-proxy-chi.vercel.app/proxy/manga",
+            const response: AxiosResponse<TMangaSearch> = await axios.get(
+                `${BASE_URL}/manga`,
                 {
                     params: {
                         title: title,
@@ -27,17 +29,16 @@ export const fetchMangaByTitle = createAsyncThunk<
             return { mangas: response.data.data, totalResults };
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                return rejectWithValue(error.response?.data.message || 'Неизвестная ошибка');
+                return rejectWithValue(error.response?.data.message || 'Unknown error');
             }
-            return rejectWithValue('Неизвестная ошибка');
+            return rejectWithValue('Unknown error');
         }
     }
 );
 
 
-
-const initialState: SearchState  = {
-    searchResults: [] as Manga[],
+const initialState: TSearchState  = {
+    searchResults: [] as TManga[],
     searchValue: "",
     pageSearchValue: "",
     currentOffset: 0,
@@ -46,7 +47,7 @@ const initialState: SearchState  = {
     limit: 10,
     loading: false,
     error: null
-} satisfies SearchState
+} satisfies TSearchState
 
 const searchSlice = createSlice({
     name: 'search',
@@ -54,11 +55,9 @@ const searchSlice = createSlice({
     reducers:{
         setSearchValue: (state, {payload}) =>{
             state.searchValue = payload;
-            // console.log(payload);
         },
         setPageSearchValue: (state, {payload}) =>{
             state.pageSearchValue = payload;
-            // console.log(payload);
         },
         clearSearch: (state) =>{
             state.searchValue = "";

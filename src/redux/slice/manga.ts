@@ -1,13 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios, { AxiosResponse } from 'axios';
-import {Manga, MangaApiResponse, MangaState, MangaStatisticsResponse} from "../../types/types";
+import {TManga, TMangaApiResponse, TMangaState, TMangaStatisticsResponse} from "@/types/types";
 
+const BASE_URL = 'https://manga-proxy-chi.vercel.app/proxy';
 
-export const fetchMangaPopular = createAsyncThunk<Manga[], void, { rejectValue: string} >(
+export const fetchMangaPopular = createAsyncThunk<TManga[], void, { rejectValue: string} >(
     "manga/fetchMangaPopular",
     async (_, { rejectWithValue }) =>{
         try{
-            const response = await axios.get("https://manga-proxy-chi.vercel.app/proxy/manga", {
+            const response = await axios.get(`${BASE_URL}/manga`, {
                 params: {
                     limit: 10,
                     order: {
@@ -22,14 +23,14 @@ export const fetchMangaPopular = createAsyncThunk<Manga[], void, { rejectValue: 
         }
         catch (error) {
             if (axios.isAxiosError(error)) {
-                return rejectWithValue(error.response?.data.message || 'Неизвестная ошибка');
+                return rejectWithValue(error.response?.data.message || 'Unknown error');
             }
-            return rejectWithValue('Неизвестная ошибка');
+            return rejectWithValue('Unknown error');
         }
     }
 )
 
-export const fetchMangaLatest = createAsyncThunk<Manga[], void, { rejectValue: string} >(
+export const fetchMangaLatest = createAsyncThunk<TManga[], void, { rejectValue: string} >(
     "manga/fetchMangaLatest",
     async (_, { rejectWithValue }) =>{
         try{
@@ -48,25 +49,25 @@ export const fetchMangaLatest = createAsyncThunk<Manga[], void, { rejectValue: s
         }
         catch (error) {
             if (axios.isAxiosError(error)) {
-                return rejectWithValue(error.response?.data.message || 'Неизвестная ошибка');
+                return rejectWithValue(error.response?.data.message || 'Unknown error');
             }
-            return rejectWithValue('Неизвестная ошибка');
+            return rejectWithValue('Unknown error');
         }
     }
 )
 
-export const fetchMangaId = createAsyncThunk<MangaApiResponse, string, { rejectValue: string }>(
+export const fetchMangaId = createAsyncThunk<TMangaApiResponse, string, { rejectValue: string }>(
     "manga/fetchMangaId",
     async (mangaId: any, { rejectWithValue }) => {
         try {
 
-            const mangaResponse = await axios.get<MangaApiResponse>(`https://manga-proxy-chi.vercel.app/proxy/manga/${mangaId}`, {
+            const mangaResponse = await axios.get<TMangaApiResponse>(`${BASE_URL}/manga/${mangaId}`, {
                 params: {
                     includes: ["cover_art", "author", "artist"],
                 },
             });
 
-            const statsResponse: AxiosResponse<MangaStatisticsResponse> = await axios.get(`https://manga-proxy-chi.vercel.app/proxy/statistics/manga/${mangaId}`);
+            const statsResponse: AxiosResponse<TMangaStatisticsResponse> = await axios.get(`${BASE_URL}/statistics/manga/${mangaId}`);
             const stats = statsResponse.data.statistics[mangaId];
 
             return {
@@ -79,22 +80,22 @@ export const fetchMangaId = createAsyncThunk<MangaApiResponse, string, { rejectV
             };
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                return rejectWithValue(error.response?.data.message || 'Неизвестная ошибка');
+                return rejectWithValue(error.response?.data.message || 'Unknown error');
             }
-            return rejectWithValue('Неизвестная ошибка');
+            return rejectWithValue('Unknown error');
         }
     }
 );
 
 
 
-const initialState : MangaState = {
+const initialState : TMangaState = {
     mangaPopular: [],
     mangaLatest: [],
     mangaItem: null,
     loading: false,
     error: null
-} satisfies MangaState
+} satisfies TMangaState
 
 const mangaSlice = createSlice({
     name: 'manga',
@@ -102,7 +103,6 @@ const mangaSlice = createSlice({
     reducers:{},
     extraReducers:  (builder) =>{
         builder
-            //популярная новая
             .addCase(fetchMangaPopular.pending, (state)=>{
                 state.loading = true;
                 state.error = null;
@@ -114,9 +114,9 @@ const mangaSlice = createSlice({
             })
             .addCase(fetchMangaPopular.rejected, (state, {payload})=>{
                 state.loading = false;
-                state.error = payload || 'Ошибка при загрузке манги';
+                state.error = payload || 'Error loading manga';
             })
-            //последняя обновлённая
+
             .addCase(fetchMangaLatest.pending, (state)=>{
                 state.loading = true;
                 state.error = null;
@@ -127,9 +127,9 @@ const mangaSlice = createSlice({
             })
             .addCase(fetchMangaLatest.rejected, (state, {payload})=>{
                 state.loading = false;
-                state.error = payload || 'Ошибка при загрузке манги';
+                state.error = payload || 'Error loading manga';
             })
-            //одна манга
+
             .addCase(fetchMangaId.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -140,9 +140,8 @@ const mangaSlice = createSlice({
             })
             .addCase(fetchMangaId.rejected, (state, { payload }) => {
                 state.loading = false;
-                state.error = payload || 'Ошибка при загрузке манги';
+                state.error = payload || 'Error loading manga';
             });
-
     }
 })
 

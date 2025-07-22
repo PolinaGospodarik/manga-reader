@@ -1,13 +1,14 @@
 import React, {useContext} from 'react';
 import "./DropDown.css";
 import {useNavigate} from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import {useAppDispatch, useAppSelector } from "@/hooks";
 import {logout} from "@/redux/slice/users";
 import {themeContext} from "@/roviders/ThemeContext";
-import {faBookmark } from "@fortawesome/free-regular-svg-icons";
+
+import {FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faRightFromBracket} from "@fortawesome/free-solid-svg-icons";
+import {faBookmark } from "@fortawesome/free-regular-svg-icons";
+import {faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 
 const DropDown = () => {
     const navigate = useNavigate();

@@ -1,20 +1,22 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Manga } from "@/types/types";
+import "./MangaListItem.css";
+import { TManga } from "@/types/types";
 import { fetchImage, getIndexes, getProxedImgaes } from "@/utils/useCoverUrls";
 import { themeContext } from "@/roviders/ThemeContext";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/hooks";
 import { fetchMangaId } from "@/redux/slice/manga";
-import "./MangaListItem.css";
 
-const MangaListItem = ({ manga }: { manga: Manga }) => {
+const MangaListItem = ({ manga }: { manga: TManga }) => {
     const [imageSrc, setImageSrc] = useState<string | null>(null);
     const [color] = useContext(themeContext);
+    const [imageError, setImageError] = useState(false);
+
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
     const [coverUrl] = getProxedImgaes(manga);
-    const [coverArtIndex, authorIndex, artistIndex] = getIndexes(manga);
+    const [authorIndex, artistIndex] = getIndexes(manga);
 
     useEffect(() => {
         if (coverUrl) {
@@ -31,16 +33,25 @@ const MangaListItem = ({ manga }: { manga: Manga }) => {
         <div className={`manga-latest__item grey-${color}`} key={manga.id} onClick={handleClick}>
             <div className="item-left">
                 <a className="item-left__img">
-                    {imageSrc ? (
-                        <img src={imageSrc} alt={manga.attributes?.title?.en || 'Cover'} />
+                    {imageSrc && !imageError ? (
+                        <img
+                            src={imageSrc}
+                            alt={manga.attributes?.title?.en || "Cover"}
+                            onError={() => setImageError(true)}
+                        />
+                    ) : imageError ? (
+                        <p>Cover not available</p>
                     ) : (
-                        <p>Обложка не доступна</p>
+                        <div className="spinner-container spinner-container__img">
+                            <span className="loader"></span>
+                        </div>
                     )}
                 </a>
+
             </div>
             <div className="item-right">
                 <div className={`item__title text-${color}`}>
-                    <h3>{manga.attributes.title?.en || 'Название недоступно'}</h3>
+                    <h3>{manga.attributes.title?.en || 'Title not available'}</h3>
                 </div>
                 <span className={`item__title text-${color}`}>{manga.relationships[authorIndex]?.attributes?.name}</span>
                 <span className={`item__title text-${color}`}>{manga.relationships[artistIndex]?.attributes?.name}</span>

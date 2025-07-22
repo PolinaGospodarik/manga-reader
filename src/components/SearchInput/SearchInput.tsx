@@ -2,17 +2,17 @@ import React, { useContext, useEffect, useState } from 'react';
 import "./SearchInput.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import {
     clearSearch,
     fetchMangaByTitle,
     setPageSearchValue,
     setSearchValue
-} from "../../redux/slice/search";
-import { Manga } from "../../types/types";
+} from "@/redux/slice/search";
+import { TManga } from "@/types/types";
 import { useNavigate } from "react-router-dom";
-import { fetchMangaId } from "../../redux/slice/manga";
-import { themeContext } from "../../roviders/ThemeContext";
+import { fetchMangaId } from "@/redux/slice/manga";
+import { themeContext } from "@/roviders/ThemeContext";
 import { fetchImage, getProxedImgaes } from "@/utils/useCoverUrls";
 
 const SearchInput = () => {
@@ -58,7 +58,7 @@ const SearchInput = () => {
         setTimeout(() => setIsListVisible(false), 150);
     };
 
-    const handleClick = (manga: Manga) => {
+    const handleClick = (manga: TManga) => {
         dispatch(fetchMangaId(manga.id));
         navigate(`/manga/${manga.id}`);
         setIsListVisible(false);
@@ -91,6 +91,8 @@ const SearchInput = () => {
                 onKeyDown={handleKeyDown}
                 autoComplete="off"
             />
+
+
             {isListVisible && searchResults?.length > 0 && isFocused && (
                 <ul className={`search-field scroll-container background-${color}`}>
                     {searchResults.map(manga => {
@@ -106,7 +108,9 @@ const SearchInput = () => {
                                         {coverImg ? (
                                             <img src={coverImg} alt="Cover" />
                                         ) : (
-                                            <p>Обложка не доступна</p>
+                                            <div className="spinner-container spinner-container__img">
+                                                <span className="loader"></span>
+                                            </div>
                                         )}
                                     </div>
                                     <div className={`search-field__item-title text-${color}`}>

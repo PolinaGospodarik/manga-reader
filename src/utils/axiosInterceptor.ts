@@ -1,8 +1,7 @@
-// src/utils/axiosInterceptor.ts
 import axios from 'axios';
-import { refreshAccessToken } from '../redux/slice/users';
+import { refreshAccessToken } from '@/redux/slice/users';
 import { getTokensFromLocalStorage, saveTokensToLocalStorage } from './authUtils';
-import store from '../redux/store/store'; // Используем дефолтный импорт store
+import store from '../redux/store/store';
 
 axios.interceptors.response.use(
     (response) => response,
