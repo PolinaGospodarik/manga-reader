@@ -245,3 +245,12 @@ export type TChaptersState = {
     imagesLoading: boolean;
     imagesError: string | null;
 };
+
+// ChapterViewer
+export type TChapterViewer ={
+    images: string[];
+    chapters: { id: string }[];
+    currentChapterIndex: number;
+    hasNextChapter: boolean;
+    hasPrevChapter: boolean;
+}

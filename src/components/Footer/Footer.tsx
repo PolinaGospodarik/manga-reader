@@ -8,7 +8,7 @@ const Footer = () => {
 
     return (
         <>
-            <div className="footer">
+            <div className={`footer background-${color}`}>
                 <span className={`footer-name text-${color}`}>© MangaDex {currentYear}</span>
                 <a className={`footer-link`} href="https://mangadex.org/contact">Сontact us</a>
             </div>

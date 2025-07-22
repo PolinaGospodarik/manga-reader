@@ -1,0 +1,31 @@
+.chapter__navigation {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 30px;
+    gap: 10px;
+}
+.chapter__navigation-item{
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    padding: 3px;
+    border-radius: 5px;
+
+    font-family: 'Poppins', 'League Spartan', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+}
+.chapter__wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+}
+.chapter__img{
+    width: 50%;
+    max-height: 100%;
+    object-fit: cover;
+}

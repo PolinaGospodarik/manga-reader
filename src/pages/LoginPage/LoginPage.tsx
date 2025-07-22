@@ -21,6 +21,10 @@ const LoginPage = () => {
                             <img src={logoText} alt="text-logo"/>
                         </a>
                         <Login></Login>
+                        <span style={{ color: "white",  marginTop: "20px"}}>
+                            username: Polinaaaa
+                            password: Slojnijparol
+                        </span>
                     </div>
                 </div>
             </div>
