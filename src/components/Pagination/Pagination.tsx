@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import "./Pagination.css"
+import styles from "./Pagination.module.css"
 import {TPaginationSearch} from "@/types/types";
 import {useAppSelector} from "@/hooks";
 import {themeContext} from "@/roviders/ThemeContext";
@@ -11,14 +11,14 @@ const Pagination: React.FC<TPaginationSearch> = ({  limit, currentOffset, onPrev
     const [color] = useContext(themeContext);
 
     return (
-        <div className="pagination">
-            <a href="#" className={`pagination__button  ${currentPage === 1 ? 'disabled' : ''}`}  onClick={onPrev}>
+        <div className={`${styles.pagination}`}>
+            <a href="#" className={`${styles["pagination__button"]}  ${currentPage === 1 ? `${styles.disabled}` : ''}`}  onClick={onPrev}>
                 Previous
             </a>
             <span className={`text-${color}`}>
                 Page {currentPage} of {totalPages}
             </span>
-            <a href="#" className={`pagination__button ${currentPage === totalPages ? 'disabled' : ''}`} onClick={onNext}>
+            <a href="#" className={`${styles["pagination__button"]} ${currentPage === totalPages ? `${styles.disabled}` : ''}`} onClick={onNext}>
                 Next
             </a>
         </div>

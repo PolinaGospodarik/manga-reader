@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import "./MangaInfo.css";
+import styles from "./MangaInfo.module.css";
 import LibraryModal from "@/components/LibraryModal/LibraryModal";
-import AccentButton from "@/components/AccentButton/AccentButton";
+import Button from "../AccentButton/Button";
 import { themeContext } from "@/roviders/ThemeContext";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { getProxedImgaes, fetchImage, getIndexes } from "@/utils/useCoverUrls";
@@ -33,13 +33,13 @@ const MangaInfo: React.FC<TMangaInfo> =({ manga }) => {
     const { data, rating, follows } = manga;
 
     return (
-        <div className={`manga-id background-${color}`}>
-            <div className="manga-id-background" style={{ backgroundImage: `url(${backgroundSrc})` }}>
-                <div className="manga-id-overlay"></div>
+        <div className={`${styles["manga-id"]} background-${color}`}>
+            <div className={`${styles["manga-id-background"]}`} style={{ backgroundImage: `url(${backgroundSrc})` }}>
+                <div className={`${styles["manga-id-overlay"]}`}></div>
             </div>
             <div className="container">
-                <div className="manga-id-wrapper">
-                    <div className="manga-id__img">
+                <div className={`${styles["manga-id-wrapper"]}`}>
+                    <div className={`${styles["manga-id__img"]}`}>
                         {imageSrc && !imageError ? (
                             <img
                                 src={imageSrc}
@@ -55,9 +55,12 @@ const MangaInfo: React.FC<TMangaInfo> =({ manga }) => {
                         )}
                     </div>
 
-                    <div className="manga-id__content">
-                        <div className="manga-id__content-top">
-                            <h1 className={`manga-id__title text-${color}`}>{data?.attributes?.title?.en}</h1>
+                    <div className={`${styles["manga-id__content"]}`}>
+                        <div className={`${styles["manga-id__content-top"]}`}>
+                            <h1 className={`${styles["manga-id__title"]} text-${color}`}>{data?.attributes?.title?.en ||
+                                data?.attributes?.title['ja-ro'] ||
+                                (Object.values(data?.attributes?.title)[0] as string || '') ||
+                                'Title not available'}</h1>
                             <div className="manga-id__creators">
                                 {data.relationships[authorIndex]?.attributes?.name && (
                                     <span className={`creators-author text-${color}`}>
@@ -72,10 +75,10 @@ const MangaInfo: React.FC<TMangaInfo> =({ manga }) => {
                                 )}
                             </div>
                         </div>
-                        <div className="manga-id__content-bottom">
+                        <div className={`${styles["manga-id__content-bottom"]}`}>
                             {user ? (
                                 <>
-                                    <AccentButton  variant="orange" className="manga-id__button" onClick={() => setShowModal(true)}>Add To Library</AccentButton>
+                                    <Button variant="orange" className="manga-id__button" onClick={() => setShowModal(true)}>Add To Library</Button>
                                     {showModal && (
                                         <LibraryModal
                                             imageSrc={imageSrc}
@@ -98,18 +101,18 @@ const MangaInfo: React.FC<TMangaInfo> =({ manga }) => {
                                 </>
                             ) : (
                                 <div>
-                                    <AccentButton  variant="orange" onClick={() => navigate("/login")}>Sign In</AccentButton>
-                                    <p className={`manga-id__text-info text-${color}`}>Log in to add manga to your library</p>
+                                    <Button variant="orange" onClick={() => navigate("/login")}>Sign In</Button>
+                                    <p className={`${styles["manga-id__text-info"]} text-${color}`}>Log in to add manga to your library</p>
                                 </div>
                             )}
-                            <div className={`manga-id__manga-stats text-${color}`}>
+                            <div className={`${styles["manga-id__manga-stats"]} text-${color}`}>
                                 <p>Rating: {rating?.bayesian.toFixed(2)}</p>
                                 <p>Number of subscriptions: {follows}</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className={`manga-id__description text-${color}`}>
+                <div className={`${styles["manga-id__description"]} text-${color}`}>
                     <p>{data?.attributes?.description?.en}</p>
                 </div>
             </div>

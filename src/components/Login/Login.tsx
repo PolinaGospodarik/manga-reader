@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import "./Login.css"
+import styles from "./Login.module.css"
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import {login} from '@/redux/slice/users';
 import {useNavigate} from "react-router-dom";
@@ -25,30 +25,30 @@ const Login = () => {
     }, [user, navigate]);
 
     return (
-        <div className="form">
+        <div className={`${styles.form}`}>
             <h2>Sign in to your account</h2>
             <form onSubmit={handleSubmit}>
-                <div className="form__login">
-                    <label className="form__title">Username or email</label>
+                <div className={`${styles["form__login"]}`}>
+                    <label className={`${styles["form__title"]}`}>Username or email</label>
                     <input
-                        className="form__text"
+                        className={`${styles["form__text"]}`}
                         type="text"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
                     />
                 </div>
-                <div className="form__password">
-                    <label className="form__title">Password</label>
+                <div className={`${styles["form__password"]}`}>
+                    <label className={`${styles["form__title"]}`}>Password</label>
                     <input
-                        className="form__text"
+                        className={`${styles["form__text"]}`}
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
                 </div>
-                <button className="form__button" type="submit" disabled={loading}>Sign in</button>
+                <button className={`${styles["form__button"]}`} type="submit" disabled={loading}>Sign in</button>
             </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>

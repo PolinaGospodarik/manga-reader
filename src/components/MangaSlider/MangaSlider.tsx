@@ -1,15 +1,11 @@
 import React, {useContext, useEffect} from 'react';
-import './MangaSlider.css';
+import styles from './MangaSlider.module.css';
 import MangaSlide from '../MangaSlide/MangaSlide';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import {TMangaDetails, TMangaSlider} from '@/types/types';
 import {themeContext} from "@/roviders/ThemeContext";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
 import { Pagination } from 'swiper/modules';
 import { fetchMangaSelfPublished } from '@/redux/slice/list';
 
@@ -38,7 +34,7 @@ const MangaSlider: React.FC<TMangaSlider> = ({ listId, slidesPerView= 5}) => {
     return (
         <div className="slider">
             <div className="container">
-                <div className={`slider__text text-${color}`}>
+                <div className={`${styles["slider__text"]} text-${color}`}>
                     <h3>{listName || 'Loading...'}</h3>
                 </div>
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import "./LibrariesList.css";
+import styles from "./LibrariesList.module.css";
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import {fetchLibraries, removeFromLibrary} from '@/redux/slice/libraries';
 import { fetchMangaId } from '@/redux/slice/manga';
@@ -74,7 +74,7 @@ const LibrariesList: React.FC<TLibrariesList> = ({ status, user }) => {
 
 
     return (
-        <div className={`libraries__wrapper background-${color}`}>
+        <div className={`${styles.libraries__wrapper} background-${color}`}>
             {loading || loadingDetails ? (
                 <div className="spinner-container">
                     <span className="loader"></span>
@@ -84,13 +84,13 @@ const LibrariesList: React.FC<TLibrariesList> = ({ status, user }) => {
                     No titles
                 </p>
             ) : (
-                <div className="libraries__grid">
+                <div className={`${styles.libraries__grid}`}>
                     {filteredManga.map(manga => (
-                        <Link to={`/manga/${manga.data.id}`} key={manga.data.id} className={`libraries-item grey-${color}`}>
-                            <div className="libraries-item__wrapper-img">
+                        <Link to={`/manga/${manga.data.id}`} key={manga.data.id} className={`${styles["libraries-item"]} grey-${color}`}>
+                            <div className={`${styles["libraries-item__wrapper-img"]}`}>
                                 {imagesMap[manga.data.id] ? (
                                     <img
-                                        className="libraries-item__img"
+                                        className={`${styles["libraries-item__img"]}`}
                                         src={imagesMap[manga.data.id]}
                                         alt={manga.data.attributes.title.en || 'Cover'}
                                     />
@@ -101,8 +101,8 @@ const LibrariesList: React.FC<TLibrariesList> = ({ status, user }) => {
                                 )}
                             </div>
                             <div className="libraries-item-info">
-                                <div className="libraries-item-info__top">
-                                    <h3 className={`libraries-item-info__title text-${color}`}>
+                                <div className={`${styles["libraries-item-info__top"]}`}>
+                                    <h3 className={`${styles["libraries-item-info__title"]} text-${color}`}>
                                         {manga.data.attributes.title.en || 'Untitled'}
                                     </h3>
                                     <button
@@ -110,24 +110,24 @@ const LibrariesList: React.FC<TLibrariesList> = ({ status, user }) => {
                                         onClick={(e) => handleRemove(e,manga.data.id)}
                                         title="Remove from library"
                                     >
-                                        <FontAwesomeIcon className={`libraries-item__remove-icon text-${color}`} icon={faXmark} />
+                                        <FontAwesomeIcon className={`${styles["libraries-item__remove-icon"]} text-${color}`} icon={faXmark} />
                                     </button>
                                 </div>
-                                <div className="library-item__meta">
-                                    <div className="library-item__stat">
+                                <div className={`${styles["library-item__meta"]}`}>
+                                    <div className={`${styles["library-item__stat"]}`}>
                                         <FontAwesomeIcon className={`library-item__icon text-${color}`} icon={faStar} />
                                         <span className={`library-item__value text-${color}`}>
                                         {manga.rating?.average?.toFixed(2) || 'N/A'}
                                     </span>
                                     </div>
-                                    <div className="library-item__stat">
+                                    <div className={`${styles["library-item__stat"]}`}>
                                         <FontAwesomeIcon className={`library-item__icon text-${color}`} icon={faBookmark} />
                                         <span className={`library-item__value text-${color}`}>
                                         {manga.follows || 0}
                                     </span>
                                     </div>
                                 </div>
-                                <p className={`libraries-item-info__description text-${color}`}>
+                                <p className={`${styles["libraries-item-info__description"]} text-${color}`}>
                                     {manga.data.attributes.description?.en || ''}
                                 </p>
                             </div>

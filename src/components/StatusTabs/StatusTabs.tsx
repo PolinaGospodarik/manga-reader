@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import "./StatusTabs.css"
+import styles from "./StatusTabs.module.css"
 import {themeContext} from "@/roviders/ThemeContext";
 import {TStatusTabs} from "@/types/types";
 
@@ -7,11 +7,11 @@ const StatusTabs: React.FC<TStatusTabs> = ({ statuses, activeStatus, onChange, c
     const [color] = useContext(themeContext);
 
     return (
-        <div className={`libraries__tabs grey-${color} ${className || ''}`}>
+        <div className={`${styles["libraries__tabs"]} grey-${color} ${className || ''}`}>
             {statuses.map(({ label, value }) => (
                 <button
                     key={value}
-                    className={`libraries__tab secondary-text-${color} ${activeStatus === value ? 'active' : ''}`}
+                    className={`${styles["libraries__tab"]} secondary-text-${color} ${activeStatus === value ? 'active' : ''}`}
                     onClick={() => onChange(value)}
                     type="button"
                 >

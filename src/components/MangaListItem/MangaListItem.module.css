@@ -1,6 +1,8 @@
 .manga-latest__item{
     padding: 15px 15px 0;
     display: flex;
+    border-radius: 10px;
+    margin-bottom: 15px;
 }
 
 .item__title h2{

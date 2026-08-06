@@ -6,7 +6,7 @@
 .slide-wrapper {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+    /*flex-wrap: wrap;*/
     width: 100%;
 }
 
@@ -96,3 +96,4 @@
     font-size: 12px;
     font-weight:400;
 }
+

@@ -1,5 +1,5 @@
     import React, {useContext, useEffect, useState} from 'react';
-    import "./MangaSlide.css"
+    import styles from "./MangaSlide.module.css"
     import {TManga} from "@/types/types";
     import {useAppDispatch, useAppSelector} from "@/hooks";
     import {fetchMangaId} from "@/redux/slice/manga";
@@ -30,14 +30,14 @@
         return (
             <>
                 <div className="slide" onClick={handleClick}>
-                    <div className="slide-wrapper">
+                    <div className={`${styles["slide-wrapper"]}`}>
                         {loading ? (
                             <div className="spinner-overlay">
                                 <span className="loader"></span>
                             </div>
                         ) : (
                             <>
-                                <div className="slide__img">
+                                <div className={`${styles["slide__img"]}`}>
                                     {error ? (
                                         <p>Cover not available</p>
                                     ) : imageSrc ? (
@@ -45,13 +45,13 @@
                                     ) : (
                                         <p>Cover not available</p>
                                     )}
-                                    <div className="text__description scroll-container">
+                                    <div className={`${styles["text__description"]} scroll-container`}>
                                         <h3>{manga.attributes.description?.en || ''}</h3>
                                     </div>
-                                    <button className="slide-read">Read</button>
+                                    <button className={`${styles["slide-read"]}`}>Read</button>
                                 </div>
                                 <div className="slide__text">
-                                    <div className={`text__title text-${color}`}>
+                                    <div className={`${styles["text__title"]} text-${color}`}>
                                         <h3>{manga.attributes.title?.en || ''}</h3>
                                     </div>
                                 </div>

@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import "./Search.css";
+import styles from "./Search.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "@/hooks";
@@ -37,25 +37,25 @@ const Search = () => {
     };
 
     return (
-        <div className="search-page__input-wrapper">
+        <div className={`${styles["search-page__input-wrapper"]}`}>
             <input
                 type="search"
                 placeholder="Search"
-                className={`search-page__input grey-${color} text-${color} placeholder-${color}`}
+                className={`${styles["search-page__input"]} grey-${color} text-${color} placeholder-${color}`}
                 value={searchPageValue}
                 onChange={handleSearchChange}
             />
             {searchPageValue && (
                 <button
                     type="button"
-                    className="search-page__button"
+                    className={`${styles["search-page__button"]}`}
                     onClick={handleClearSearch}
                 >
                     <FontAwesomeIcon className={`text-${color}`} icon={faTimes} />
                 </button>
             )}
             {!searchPageValue && (
-                <button type="button" className="search-page__button">
+                <button type="button" className={`${styles["search-page__button"]}`}>
                     <FontAwesomeIcon className={`text-${color}`} icon={faMagnifyingGlass} />
                 </button>
             )}

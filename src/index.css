@@ -112,6 +112,12 @@ button{
 .selection-dark:hover{
     background-color: rgb(78, 78, 80);
 }
+.active{
+    transition: transform 0.3s ease;
+}
+.active:active{
+    transform: scale(1.1);
+}
 
 /*скролл*/
 .scroll-container {
@@ -138,3 +144,27 @@ button{
     scrollbar-color: #888 transparent;
     scrollbar-width: thin;
 }
+
+
+
+.swiper-pagination-bullet{
+    background-color: #808080e6;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: rgba(255, 103, 64);
+}
+
+
+
+
+
+.swiper{
+    position: relative;
+    padding-bottom: 30px;
+}
+
+.swiper-pagination{
+    display: block;
+}
+

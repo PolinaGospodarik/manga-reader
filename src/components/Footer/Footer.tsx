@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import "./Footer.css"
+import styles from "./Footer.module.css"
 import {themeContext} from "@/roviders/ThemeContext";
 
 const Footer = () => {
@@ -8,9 +8,9 @@ const Footer = () => {
 
     return (
         <>
-            <div className={`footer background-${color}`}>
-                <span className={`footer-name text-${color}`}>© MangaDex {currentYear}</span>
-                <a className={`footer-link`} href="https://mangadex.org/contact">Сontact us</a>
+            <div className={`${styles.footer} background-${color}`}>
+                <span className={`${styles["footer-name"]} text-${color}`}>© MangaDex {currentYear}</span>
+                <a className={`${styles["footer-link"]}`} href="https://mangadex.org/contact">Сontact us</a>
             </div>
         </>
     );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import "./MangaListItem.css";
+import styles from "./MangaListItem.module.css";
 import { TManga } from "@/types/types";
 import { fetchImage, getIndexes, getProxedImgaes } from "@/utils/useCoverUrls";
 import { themeContext } from "@/roviders/ThemeContext";
@@ -30,9 +30,9 @@ const MangaListItem = ({ manga }: { manga: TManga }) => {
     };
 
     return (
-        <div className={`manga-latest__item grey-${color}`} key={manga.id} onClick={handleClick}>
+        <div className={`${styles["manga-latest__item"]} grey-${color}`} key={manga.id} onClick={handleClick}>
             <div className="item-left">
-                <a className="item-left__img">
+                <a className={`${styles["item-left__img"]}`}>
                     {imageSrc && !imageError ? (
                         <img
                             src={imageSrc}
@@ -50,11 +50,15 @@ const MangaListItem = ({ manga }: { manga: TManga }) => {
 
             </div>
             <div className="item-right">
-                <div className={`item__title text-${color}`}>
-                    <h3>{manga.attributes.title?.en || 'Title not available'}</h3>
+                <div className={`${styles.item__title} text-${color}`}>
+                    <h3>{manga.attributes.title.en ||
+                        manga.attributes.title['ja-ro'] ||
+                        (Object.values(manga.attributes.title)[0] as string || '') ||
+                        'Title not available'}
+                    </h3>
                 </div>
-                <span className={`item__title text-${color}`}>{manga.relationships[authorIndex]?.attributes?.name}</span>
-                <span className={`item__title text-${color}`}>{manga.relationships[artistIndex]?.attributes?.name}</span>
+                <span className={`${styles.item__title} text-${color}`}>{manga.relationships[authorIndex]?.attributes?.name}</span>
+                <span className={`${styles.item__title} text-${color}`}>{manga.relationships[artistIndex]?.attributes?.name}</span>
             </div>
         </div>
     );

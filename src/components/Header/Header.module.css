@@ -37,16 +37,6 @@
     align-items: center;
 }
 
-.header-right__search{
-    margin-right: 15px;
-}
-
-.header-right__search{
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
 .header-right__button-theme{
     background-color: transparent;
     margin-right: 15px;

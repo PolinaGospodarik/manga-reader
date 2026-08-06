@@ -1,5 +1,5 @@
 import React from "react";
-import "./ChapterList.css"
+import styles from "./ChapterList.module.css"
 import { useAppSelector } from "@/hooks";
 import { Link } from "react-router-dom";
 import { themeContext } from "@/roviders/ThemeContext";
@@ -14,7 +14,7 @@ const ChapterList = () => {
     return (
         <div className={`chapters text-${color}`}>
             <div className="container">
-                <h2 className="chapters__title">Chapters:</h2>
+                <h2 className={`${styles.chapters__title}`}>Chapters:</h2>
                 {loading ? (
                     <div className="spinner-container">
                         <span className="loader"></span>
@@ -24,10 +24,10 @@ const ChapterList = () => {
                 ) : chapters.length === 0 ? (
                     <p>No chapters available</p>
                 ) : (
-                    <ul className="chapters__list">
+                    <ul className={`${styles.chapters__list}`}>
                         {chapters.map(ch => (
-                            <li className={`chapters__item`} key={ch.id}>
-                                <Link className={`chapters__item-link text-${color} grey-${color}`} to={`/chapter/${ch.id}`}>
+                            <li className={`${styles.chapters__item} active`} key={ch.id}>
+                                <Link className={`${styles["chapters__item-link"]} text-${color} grey-${color} selection-${color}`} to={`/chapter/${ch.id}`}>
                                     {ch.chapter ? `Chapter ${ch.chapter}` : "Chapter ?"}
                                     {ch.title ? ` - ${ch.title}` : ""}
                                     {ch.volume ? ` (Vol. ${ch.volume})` : ""}

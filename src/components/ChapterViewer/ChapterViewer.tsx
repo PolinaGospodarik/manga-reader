@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useEffect, useState} from "react";
-import "./ChapterViewer.css";
+import styles from "./ChapterViewer.module.css";
 import { useNavigate } from "react-router-dom";
 import { TChapterViewer } from "@/types/types";
 import { themeContext } from "@/roviders/ThemeContext";
@@ -64,19 +64,19 @@ const ChapterViewer: React.FC<TChapterViewer> = ({images, chapters, currentChapt
 
     return (
         <>
-            <div className="chapter__navigation">
+            <div className={`${styles.chapter__navigation}`}>
                 <button
-                    className={`chapter__navigation-item grey-${color} text-${color}`}
+                    className={`${styles["chapter__navigation-item"]} grey-${color} text-${color}`}
                     onClick={prevPage}
                     disabled={!hasPrevChapter && currentPage === 0}
                 >
                     Previous
                 </button>
-                <span className={`chapter__navigation-item grey-${color} text-${color}`}>
+                <span className={`${styles["chapter__navigation-item"]} grey-${color} text-${color}`}>
                     Page {currentPage + 1} / {images.length}
                 </span>
                 <button
-                    className={`chapter__navigation-item grey-${color} text-${color}`}
+                    className={`${styles["chapter__navigation-item"]} grey-${color} text-${color}`}
                     onClick={nextPage}
                     disabled={!hasNextChapter && currentPage === images.length - 1}
                 >
@@ -84,10 +84,10 @@ const ChapterViewer: React.FC<TChapterViewer> = ({images, chapters, currentChapt
                 </button>
             </div>
 
-            <div className="chapter__wrapper" onClick={handleImageClick}>
+            <div className={`${styles.chapter__wrapper}`} onClick={handleImageClick}>
                 {images.length > 0 && (
                     <img
-                        className="chapter__img"
+                        className={`${styles.chapter__img}`}
                         src={images[currentPage]}
                         alt={`Page ${currentPage + 1}`}
                     />

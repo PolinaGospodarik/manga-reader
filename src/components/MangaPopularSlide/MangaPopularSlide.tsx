@@ -1,12 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
-import "./MangaPopularSlide.css"
+import styles from "./MangaPopularSlide.module.css"
 import {TManga} from "@/types/types";
 import TagList from "../TagList/TagList";
 
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "@/hooks";
 import {fetchMangaId} from "@/redux/slice/manga";
@@ -41,11 +37,11 @@ const MangaPopularSlide = ({manga}:{manga: TManga, index: number}) => {
 
     return (
         <>
-            <div className={`slide-popular background-${color}`}  style={{ backgroundImage: `url(${background})` }} >
+            <div className={`${styles["slide-popular"]} background-${color}`}  style={{ backgroundImage: `url(${background})` }} >
                 <div className="container">
-                    <div className={`popular-title text-${color}`}>Popular New Titles</div>
-                    <div className="slide-popular-wrapper" >
-                        <a className="slide-popular-left__img" onClick={handleClick}>
+                    <div className={`${styles["popular-title"]} text-${color}`}>Popular New Titles</div>
+                    <div className={`${styles["slide-popular-wrapper"]}`}>
+                        <a className={`${styles["slide-popular-left__img"]}`} onClick={handleClick}>
                             {loading ? (
                                 <div className="spinner-container spinner-container__img">
                                     <span className="loader"></span>
@@ -58,25 +54,28 @@ const MangaPopularSlide = ({manga}:{manga: TManga, index: number}) => {
                                 <p>Cover not available</p>
                             )}
                         </a>
-                        <div className="slide-popular-right__text">
+                        <div className={`${styles["slide-popular-right__text"]}`}>
                             <div className="text-top" onClick={handleClick}>
-                                <div className={`text-top__title text-${color}`}>
-                                    <h2>{manga.attributes.title?.en || ''}</h2>
+                                <div className={`${styles["text-top__title"]} text-${color}`}>
+                                    <h2>{manga.attributes.title.en ||
+                                        manga.attributes.title['ja-ro'] ||
+                                        (Object.values(manga.attributes.title)[0] as string || '') ||
+                                        'Title not available'}</h2>
                                 </div>
                                 <TagList tags={manga.attributes.tags}/>
-                                <div className={`text-top__description text-${color} scroll-container`}>
+                                <div className={`${styles["text-top__description"]} text-${color} scroll-container`}>
                                     <p>{manga.attributes.description?.en || ''}</p>
                                 </div>
                             </div>
-                            <div className="text-bottom">
+                            <div className={`${styles["text-bottom"]}`}>
                                 <div className="text-bottom__creators">
                                     {manga.relationships[authorIndex]?.attributes?.name && (
-                                        <span className={`creators-author text-${color}`}>
+                                        <span className={`${styles["creators-author"]} text-${color}`}>
                                             {manga.relationships[authorIndex].attributes.name}
                                         </span>
                                     )}
                                     {manga.relationships[artistIndex]?.attributes?.name && (
-                                        <span className={`creators-artist text-${color}`}>
+                                        <span className={`${styles["creators-artist"]} text-${color}`}>
                                             {manga.relationships[authorIndex]?.attributes?.name ? ', ' : ''}
                                             {manga.relationships[artistIndex].attributes.name}
                                         </span>

@@ -1,5 +1,5 @@
 import React from 'react';
-import "./TagList.css"
+import styles from "./TagList.module.css"
 import {TTagList} from "@/types/types";
 
 const TagList: React.FC<TTagList> = ({ tags, className }) => {
@@ -14,11 +14,11 @@ const TagList: React.FC<TTagList> = ({ tags, className }) => {
     };
 
     return (
-        <span className={`tag-list ${className || ''}`}>
+        <span className={`${styles["tag-list"]} ${className || ''}`}>
             {tags.map((tag, index) => (
                 <span
                     key={tag.id}
-                    className="tag"
+                    className={`${styles.tag}`}
                     style={getTagColor(tag.attributes.group)}
                 >
                     {tag.attributes.name.en.toUpperCase()}

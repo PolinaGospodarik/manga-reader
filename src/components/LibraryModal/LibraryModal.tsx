@@ -1,10 +1,10 @@
 import React, {useContext, useState} from 'react';
-import './LibraryModal.css';
+import styles from './LibraryModal.module.css';
 import CustomSelect from "@/components/CustomSelect/CustomSelect";
 import {themeContext} from "@/roviders/ThemeContext";
 import { TLibraryModal } from "@/types/types.js";
 
-import AccentButton from "@/components/AccentButton/AccentButton";
+import Button from "../AccentButton/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
@@ -28,20 +28,20 @@ const LibraryModal: React.FC<TLibraryModal> = ({ imageSrc, title, onConfirm, onC
     };
 
     return (
-        <div className="modal-overlay" onClick={handleOverlayClick}>
-            <div className={`modal background-${color}`}>
-                <button className="modal-close" onClick={onCancel}>
-                    <FontAwesomeIcon className={`modal-close__icon text-${color}`} icon={faXmark} />
+        <div className={`${styles["modal-overlay"]}`} onClick={handleOverlayClick}>
+            <div className={`${styles.modal} background-${color}`}>
+                <button className={`${styles["modal-close"]}`} onClick={onCancel}>
+                    <FontAwesomeIcon className={`${styles["modal-close__icon"]} text-${color}`} icon={faXmark} />
                 </button>
-                <h2 className={`modal__title text-${color}`}>Add to library</h2>
+                <h2 className={`${styles.modal__title} text-${color}`}>Add to library</h2>
                 <div className="modal-content">
-                    <div className="modal-content-favorite">
-                        <div className="modal-content-favorite-light">
-                            {imageSrc && <img src={imageSrc} alt="cover" className="modal-image" />}
+                    <div className={`${styles["modal-content-favorite"]}`}>
+                        <div className={`${styles["modal-content-favorite-light"]}`}>
+                            {imageSrc && <img src={imageSrc} alt="cover" className={`${styles["odal-image"]}`} />}
                         </div>
-                        <div className="modal-content-favorite-right">
-                            <h3 className={`modal-content-favorite-right__title text-${color}`}>{title}</h3>
-                            <h4 className={`modal-content-favorite-right__title-select text-${color}`}>Reading Status</h4>
+                        <div className={`${styles["modal-content-favorite-right"]}`}>
+                            <h3 className={`${styles["modal-content-favorite-right__title"]} text-${color}`}>{title}</h3>
+                            <h4 className={`${styles["modal-content-favorite-right__title-select"]} text-${color}`}>Reading Status</h4>
                             <CustomSelect
                                 onChange={(value) => setSelectedStatus(value)}
                                 defaultValue={selectedStatus}
@@ -49,15 +49,15 @@ const LibraryModal: React.FC<TLibraryModal> = ({ imageSrc, title, onConfirm, onC
                         </div>
                     </div>
 
-                    <div className="modal-actions">
-                        <button className={`modal-actions__button grey-${color} selection-${color} text-${color}`} onClick={onCancel}>Cancel</button>
-                        <AccentButton
+                    <div className={`${styles["modal-actions"]}`}>
+                        <button className={`${styles["modal-actions__button"]} grey-${color} selection-${color} text-${color}`} onClick={onCancel}>Cancel</button>
+                        <Button
                             variant="orange"
-                            className="modal-actions__button"
+                            className={`${styles["modal-actions__button"]}`}
                             onClick={() => onConfirm(statusMap[selectedStatus] || 'reading')}
                         >
                             Add
-                        </AccentButton>
+                        </Button>
                     </div>
                 </div>
             </div>

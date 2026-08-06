@@ -1,5 +1,4 @@
-.orange-button {
-    background-color: rgb(255,103,64);
+.accentButton {
     color: #ffffff;
     border-radius: 5px;
     font-size: 20px;
@@ -9,11 +8,16 @@
     transition: background-color 0.3s ease;
 }
 
-.orange-button:hover {
+.orange {
+    background-color: rgb(255,103,64);
+}
+
+.orange:hover {
     background-color: rgb(203, 82, 49);
 }
 
-.orange-button:disabled {
+.orange:disabled,
+.disabled{
     background-color: #ccc;
     cursor: not-allowed;
 }

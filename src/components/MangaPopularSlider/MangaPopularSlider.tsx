@@ -1,14 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
-import "./MangaPopularSlider.css";
+import styles from "./MangaPopularSlider.module.css";
 
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { fetchMangaPopular } from "@/redux/slice/manga";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
 import { Navigation } from 'swiper/modules';
 
 import MangaPopularSlide from "../MangaPopularSlide/MangaPopularSlide";
@@ -50,13 +46,13 @@ const MangaPopularSlider = () => {
                             modules={[Navigation]}
                         >
                             {mangaPopular.map((manga, index) => (
-                                <SwiperSlide className={"manga-popular"} key={manga.id}>
+                                <SwiperSlide className={`${styles["manga-popular"]}`} key={manga.id}>
                                     <MangaPopularSlide manga={manga} index={index}/>
                                 </SwiperSlide>
                             ))}
-                            <div className="text-bottom__other">
-                                <div className={`other__numbering text-${color}`}>NO.{currentIndex + 1}</div>
-                                <div className="other__navigation"><NavigationButtons/></div>
+                            <div className={`${styles["text-bottom__other"]}`}>
+                                <div className={`${styles["other__numbering"]} text-${color}`}>NO.{currentIndex + 1}</div>
+                                <div className={`${styles["other__navigation"]}`}><NavigationButtons/></div>
                             </div>
                         </Swiper>
                     </>

@@ -28,9 +28,11 @@ const ChapterPage = () => {
 
     if (loading) {
         return (
-            <div className="spinner-fullscreen">
-                <div className="spinner-container spinner-container__img">
-                    <span className="loader"></span>
+            <div className={`background-${color}`}>
+                <div className="spinner-fullscreen">
+                    <div className="spinner-container spinner-container__img">
+                        <span className="loader"></span>
+                    </div>
                 </div>
             </div>
         );

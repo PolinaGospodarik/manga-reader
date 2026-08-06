@@ -27,8 +27,10 @@ export type TManga = {
     relationships: TRelationship[];
 };
 
+export type TTitle = Partial<Record<string, string>>;
 export type TMangaAttributes = {
-    title: {
+    title: TTitle;
+    altTitles:{
         en: string;
     };
     description: {
@@ -211,7 +213,7 @@ export type TLibrariesList = {
     user?: boolean;
 };
 
-// AccentButton
+// Button
 export type TAccentButton = {
     children: string;
     onClick?: () => void;

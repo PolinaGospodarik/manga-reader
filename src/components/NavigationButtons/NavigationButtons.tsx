@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import "./NavigationButtons.css"
+import styles from "./NavigationButtons.module.css"
 import { useSwiper } from 'swiper/react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -19,10 +19,10 @@ export const NavigationButtons = () => {
 
     return (
         <>
-            <button className={`custom-prev text-${color}`} onClick={handlePrev}>
+            <button className={`${styles["custom-prev"]} text-${color}`} onClick={handlePrev}>
                 <FontAwesomeIcon icon={faChevronLeft} />
             </button>
-            <button className={`custom-next text-${color}`} onClick={handleNext}>
+            <button className={`${styles["custom-next"]} text-${color}`} onClick={handleNext}>
                 <FontAwesomeIcon icon={faChevronRight} />
             </button>
         </>

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import "./SearchInput.css";
+import styles from "./SearchInput.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useAppDispatch, useAppSelector } from "@/hooks";
@@ -79,11 +79,11 @@ const SearchInput = () => {
     };
 
     return (
-        <div className="header-right__search">
+        <div className={`${styles["header-right__search"]}`}>
             <input
                 type="search"
                 placeholder="Search"
-                className={`search-input ${isFocused ? 'search--focused' : ''} grey-${color} text-${color} placeholder-${color}`}
+                className={`${styles["search-input"]} ${isFocused ? `${styles["search--focused"]}` : ''} grey-${color} text-${color} placeholder-${color}`}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 value={searchValue}
@@ -94,17 +94,17 @@ const SearchInput = () => {
 
 
             {isListVisible && searchResults?.length > 0 && isFocused && (
-                <ul className={`search-field scroll-container background-${color}`}>
+                <ul className={`${styles["search-field"]} scroll-container background-${color}`}>
                     {searchResults.map(manga => {
                         const coverImg = imagesMap[manga.id];
                         return (
                             <li
-                                className="search-field__item"
+                                className={`${styles["search-field__item"]}`}
                                 key={manga.id}
                                 onMouseDown={() => handleClick(manga)}
                             >
-                                <div className={`search-field__item-wrapper grey-${color} selection-${color}`}>
-                                    <div className="search-field__item-img">
+                                <div className={`${styles["search-field__item-wrapper"]} grey-${color} selection-${color}`}>
+                                    <div className={`${styles["search-field__item-img"]}`}>
                                         {coverImg ? (
                                             <img src={coverImg} alt="Cover" />
                                         ) : (
@@ -113,8 +113,13 @@ const SearchInput = () => {
                                             </div>
                                         )}
                                     </div>
-                                    <div className={`search-field__item-title text-${color}`}>
-                                        <h4>{manga.attributes.title?.en}</h4>
+                                    <div className={`${styles["search-field__item-title"]} text-${color}`}>
+                                        <h4>{manga.attributes.title?.en||
+                                            manga.attributes.altTitles?.en||
+                                            manga.attributes.title['ja-ro'] ||
+                                            (Object.values(manga.attributes.title)[0] as string || '') ||
+                                            'Title not available'}
+                                        </h4>
                                     </div>
                                 </div>
                             </li>
@@ -126,14 +131,14 @@ const SearchInput = () => {
             {searchValue ? (
                 <button
                     type="button"
-                    className={`search-button text-${color}`}
+                    className={`${styles["search-button"]} text-${color}`}
                     onClick={handleClearSearch}
                     aria-label="Clear search"
                 >
                     <FontAwesomeIcon icon={faTimes} />
                 </button>
             ) : (
-                <button type="button" className={`search-button text-${color}`} aria-label="Search">
+                <button type="button" className={`${styles["search-button"]} text-${color}`} aria-label="Search">
                     <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </button>
             )}

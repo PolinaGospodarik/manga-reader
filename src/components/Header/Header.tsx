@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext, useRef} from 'react';
-import "./Header.css";
+import styles from "./Header.module.css";
 import SearchInput from "../SearchInput/SearchInput";
 import DropDown from "../DropDown/DropDown";
 import logoImg from "@/img/mangadex-logo.svg";
@@ -51,23 +51,23 @@ const Header = () => {
     };
 
     return (
-        <div className={`header ${isScrolled ? `scrolled background-${color}` : ''}`}>
+        <div className={`${styles.header} ${isScrolled ? `${styles.scrolled} background-${color}` : ''}`}>
             <div className="container">
-                <div className="header-wrapper">
+                <div className={`${styles["header-wrapper"]}`}>
                     <a href="#" onClick={handleClickLogo}>
                         <img src={logoImg} alt="logo-img"/>
                         <img
                             src={color === "dark" ? logoTextWhite : logoTextBlack}
                             alt="Logo"
-                            className="logo-wordmark"
+                            className={`${styles["logo-wordmark"]}`}
                         />
                     </a>
-                    <div className="header-right">
+                    <div className={`${styles["header-right"]}`}>
                         <SearchInput/>
-                        <div className={`header-right__avatar grey-${color}`}
+                        <div className={`${styles["header-right__avatar"]} grey-${color}`}
                              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                              ref={avatarRef}>
-                            <img className="avatar" src={avatar} alt="avatar"/>
+                            <img className={`${styles.avatar}`} src={avatar} alt="avatar"/>
                         </div>
                     </div>
                 </div>
